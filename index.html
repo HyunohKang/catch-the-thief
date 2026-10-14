@@ -4,26 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="theme-color" content="#0F172A">
-<meta name="description" content="도둑 잡기 — Scotland Yard 스타일의 긴장감 넘치는 추리 보드게임. 경찰이 되어 도둑을 추적하거나, 도둑이 되어 탈출하세요!">
-<meta property="og:title" content="🎩 Catch The Thief — 도둑 잡기">
-<meta property="og:description" content="턴제 추리 보드게임 · 경찰 vs 도둑">
-<title>🎩 Catch The Thief — 도둑 잡기</title>
+<meta name="description" content="Catch The Thief: City Undercover — 은닉 이동 × 심리전 × 도시 경영이 결합된 프리미엄 추리 보드게임">
+<meta property="og:title" content="🎩 Catch The Thief : City Undercover">
+<meta property="og:description" content="Scotland Yard × Among Us × 모두의마블 — 누가 진짜 도둑인가?">
+<title>🎩 City Undercover — 도둑 잡기</title>
 <style>
-/* ================= Design Tokens ================= */
 :root{
-  --bg0:#0F172A; --bg1:#111827; --bg2:#1E293B;
-  --primary:#6366F1; --secondary:#8B5CF6;
-  --danger:#EF4444; --success:#22C55E; --accent:#F59E0B;
-  --text:#F1F5F9; --text-dim:#94A3B8; --text-faint:#64748B;
-  --glass:rgba(30,41,59,.55);
-  --glass-hi:rgba(51,65,85,.5);
+  --bg0:#0F172A;--bg1:#111827;--bg2:#1E293B;
+  --primary:#6366F1;--secondary:#8B5CF6;
+  --danger:#EF4444;--success:#22C55E;--gold:#F59E0B;
+  --text:#F1F5F9;--text-dim:#94A3B8;--text-faint:#64748B;
+  --glass:rgba(30,41,59,.55);--glass-hi:rgba(51,65,85,.5);
   --line:rgba(148,163,184,.14);
-  --r2:18px; --r3:24px; --r4:32px;
+  --r2:18px;--r3:24px;--r4:32px;
   --shadow:0 24px 60px -20px rgba(0,0,0,.65);
   --glow-p:0 0 24px rgba(99,102,241,.45);
   --ease:cubic-bezier(.22,1,.36,1);
-  --sat:env(safe-area-inset-top,0px);
-  --sab:env(safe-area-inset-bottom,0px);
+  --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
   color-scheme:dark;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -34,66 +31,43 @@ body{
     radial-gradient(90% 60% at 80% -10%,rgba(99,102,241,.16),transparent),
     radial-gradient(80% 50% at 10% 110%,rgba(139,92,246,.13),transparent),
     linear-gradient(180deg,var(--bg0),var(--bg1));
-  color:var(--text);
-  overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
-  min-height:100dvh;
+  color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased;min-height:100dvh;
 }
 button{font-family:inherit;color:inherit;background:none;border:none;cursor:pointer}
 input{font-family:inherit}
 [hidden]{display:none!important}
 ::selection{background:rgba(99,102,241,.4)}
 
-/* ================= Screens ================= */
 .scr{min-height:100dvh;display:none;flex-direction:column;animation:scrIn .55s var(--ease) both}
 .scr.active{display:flex}
 @keyframes scrIn{from{opacity:0;transform:translateY(18px) scale(.995)}to{opacity:1;transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes blink{0%,100%{opacity:.15}50%{opacity:.9}}
 
-/* ================= Shared UI ================= */
-.glass{
-  background:var(--glass);
-  border:1px solid var(--line);
-  border-radius:var(--r3);
-  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
-  box-shadow:var(--shadow);
-}
-.btn{
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  min-height:56px;padding:0 24px;border-radius:var(--r2);
-  font-size:16px;font-weight:700;letter-spacing:-.01em;
-  transition:transform .3s var(--ease),box-shadow .3s,filter .2s;
-  position:relative;overflow:hidden;
-}
+.glass{background:var(--glass);border:1px solid var(--line);border-radius:var(--r3);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:var(--shadow)}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:0 24px;
+  border-radius:var(--r2);font-size:16px;font-weight:700;letter-spacing:-.01em;
+  transition:transform .3s var(--ease),box-shadow .3s;position:relative;overflow:hidden}
 .btn:active{transform:scale(.96)}
 .btn svg{width:20px;height:20px;flex:none}
-.btn-pri{
-  color:#fff;background:linear-gradient(130deg,var(--primary),var(--secondary));
-  box-shadow:0 14px 34px -10px rgba(99,102,241,.6),inset 0 1px 0 rgba(255,255,255,.22);
-}
-.btn-pri:hover{transform:translateY(-2px);box-shadow:0 18px 44px -10px rgba(99,102,241,.75)}
-.btn-glass{
-  background:var(--glass-hi);border:1px solid var(--line);
-  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-}
+.btn-pri{color:#fff;background:linear-gradient(130deg,var(--primary),var(--secondary));
+  box-shadow:0 14px 34px -10px rgba(99,102,241,.6),inset 0 1px 0 rgba(255,255,255,.22)}
+.btn-pri:hover{transform:translateY(-2px)}
+.btn-glass{background:var(--glass-hi);border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 .btn-glass:hover{background:rgba(71,85,105,.55);transform:translateY(-2px)}
-.btn-danger{color:#fff;background:linear-gradient(130deg,#EF4444,#B91C1C);box-shadow:0 14px 34px -12px rgba(239,68,68,.55)}
 .btn-ok{color:#06240f;background:linear-gradient(130deg,#4ADE80,#22C55E);box-shadow:0 14px 34px -12px rgba(34,197,94,.55)}
-.chip{
-  display:inline-flex;align-items:center;gap:7px;
-  font-size:11px;font-weight:700;letter-spacing:.18em;
-  padding:7px 14px;border-radius:99px;
-  background:rgba(99,102,241,.14);border:1px solid rgba(99,102,241,.35);color:#A5B4FC;
-}
-.icon-btn{
-  width:44px;height:44px;border-radius:14px;flex:none;
-  display:flex;align-items:center;justify-content:center;
-  background:var(--glass-hi);border:1px solid var(--line);
-  transition:background .2s,transform .2s;
-}
+.btn-danger{color:#fff;background:linear-gradient(130deg,#EF4444,#B91C1C);box-shadow:0 14px 34px -12px rgba(239,68,68,.55)}
+.chip{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.18em;
+  padding:7px 14px;border-radius:99px;background:rgba(99,102,241,.14);border:1px solid rgba(99,102,241,.35);color:#A5B4FC}
+.icon-btn{width:44px;height:44px;border-radius:14px;flex:none;display:flex;align-items:center;justify-content:center;
+  background:var(--glass-hi);border:1px solid var(--line);transition:background .2s,transform .2s}
 .icon-btn:active{transform:scale(.92)}
 .icon-btn svg{width:19px;height:19px}
 
-/* ================= Home ================= */
+/* ===== Home ===== */
 #scr-home{position:relative;overflow:hidden;justify-content:space-between;text-align:center}
 .bg-anim{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.5;mix-blend-mode:screen}
@@ -103,392 +77,389 @@ input{font-family:inherit}
 @keyframes bl1{to{transform:translate(8vmax,6vmax) scale(1.15)}}
 @keyframes bl2{to{transform:translate(-7vmax,8vmax) scale(.88)}}
 @keyframes bl3{to{transform:translate(6vmax,-7vmax) scale(1.1)}}
-.grid-floor{
-  position:absolute;left:-20%;right:-20%;bottom:-8%;height:46%;
+.skyline{
+  position:absolute;left:0;right:0;bottom:0;height:34%;opacity:.85;pointer-events:none;
   background:
-    linear-gradient(transparent 0,rgba(15,23,42,.9) 90%),
-    repeating-linear-gradient(90deg,rgba(99,102,241,.16) 0 1px,transparent 1px 70px),
-    repeating-linear-gradient(0deg,rgba(99,102,241,.16) 0 1px,transparent 1px 44px);
-  transform:perspective(500px) rotateX(58deg);
-  transform-origin:bottom;
-  animation:floorMove 9s linear infinite;
+    linear-gradient(0deg,#0B1222 30%,transparent),
+    repeating-linear-gradient(90deg,#141E33 0 46px,#0E1627 46px 90px,#182440 90px 150px,#101A2E 150px 210px);
+  -webkit-mask:linear-gradient(0deg,#000 72%,transparent);mask:linear-gradient(0deg,#000 72%,transparent);
 }
-@keyframes floorMove{to{background-position:0 0,70px 0,0 44px}}
-.city-dot{position:absolute;width:5px;height:5px;border-radius:50%;animation:cityBlink 3.2s ease-in-out infinite}
-@keyframes cityBlink{0%,100%{opacity:.15}50%{opacity:.9}}
-
+.neon{position:absolute;font-size:11px;font-weight:800;letter-spacing:.2em;padding:6px 12px;border-radius:8px;
+  animation:neonFlicker 3.4s infinite}
+.n1{left:8%;bottom:26%;color:#F472B6;border:1px solid #F472B6;box-shadow:0 0 14px #F472B688;animation-delay:.4s}
+.n2{right:10%;bottom:30%;color:#67E8F9;border:1px solid #67E8F9;box-shadow:0 0 14px #67E8F988;animation-delay:1.2s}
+.n3{left:44%;bottom:22%;color:#FCD34D;border:1px solid #FCD34D;box-shadow:0 0 14px #FCD34D88;animation-delay:2s}
+@keyframes neonFlicker{0%,100%{opacity:.95}8%{opacity:.4}12%{opacity:.95}60%{opacity:.85}64%{opacity:.3}68%{opacity:.95}}
+.city-dot{position:absolute;width:5px;height:5px;border-radius:50%;animation:blink 3.2s ease-in-out infinite}
 .home-top{position:relative;z-index:1;padding:calc(var(--sat) + 24px) 24px 0;display:flex;justify-content:space-between;align-items:center}
-.logo-sm{font-size:15px;font-weight:800;letter-spacing:.04em;display:flex;align-items:center;gap:8px}
-.online-chip{
-  display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--text-dim);
+.logo-sm{font-size:14px;font-weight:800;letter-spacing:.04em;display:flex;align-items:center;gap:8px}
+.online-chip{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--text-dim);
   padding:8px 14px;border-radius:99px;background:var(--glass);border:1px solid var(--line);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-}
-.online-chip .dot{width:8px;height:8px;border-radius:50%;background:var(--success);box-shadow:0 0 10px var(--success);animation:cityBlink 2s infinite}
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.online-chip .dot{width:8px;height:8px;border-radius:50%;background:var(--success);box-shadow:0 0 10px var(--success);animation:blink 2s infinite}
 .online-chip b{color:var(--text);font-variant-numeric:tabular-nums}
-
-.hero{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 24px}
-.hero-hat{
-  font-size:clamp(68px,18vw,104px);line-height:1;
-  filter:drop-shadow(0 18px 34px rgba(99,102,241,.45));
-  animation:hatFloat 4.5s ease-in-out infinite;
-}
+.hero{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 24px}
+.hero-hat{font-size:clamp(60px,15vw,92px);line-height:1;filter:drop-shadow(0 18px 34px rgba(99,102,241,.45));animation:hatFloat 4.5s ease-in-out infinite}
 @keyframes hatFloat{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-14px) rotate(4deg)}}
-.hero h1{
-  margin-top:18px;
-  font-size:clamp(34px,9vw,58px);font-weight:900;letter-spacing:-.03em;line-height:1.12;
-  background:linear-gradient(120deg,#fff 20%,#A5B4FC 55%,#C4B5FD 80%);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-}
-.hero .sub{margin-top:12px;color:var(--text-dim);font-size:15px;font-weight:500}
+.hero h1{margin-top:14px;font-size:clamp(30px,8vw,52px);font-weight:900;letter-spacing:-.03em;line-height:1.1;
+  background:linear-gradient(120deg,#fff 20%,#A5B4FC 55%,#C4B5FD 80%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .ver{margin-top:6px;font-size:12px;font-weight:800;letter-spacing:.34em;color:#FCD34D;text-shadow:0 0 12px rgba(245,158,11,.6)}
+.hero .sub{margin-top:12px;color:var(--text-dim);font-size:14px;font-weight:500;max-width:320px;word-break:keep-all}
 .hero .sub b{color:#A5B4FC}
-.wanted-row{margin-top:22px;display:flex;gap:10px}
-.wanted{
-  font-size:11px;font-weight:700;letter-spacing:.14em;padding:8px 14px;border-radius:99px;
-  border:1px solid var(--line);background:var(--glass);color:var(--text-dim);
-  animation:fadeUp .8s var(--ease) both;
-}
-.wanted:nth-child(2){animation-delay:.12s}
-.wanted:nth-child(3){animation-delay:.24s}
+.wanted-row{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.wanted{font-size:11px;font-weight:700;letter-spacing:.12em;padding:8px 14px;border-radius:99px;
+  border:1px solid var(--line);background:var(--glass);color:var(--text-dim);animation:fadeUp .8s var(--ease) both}
+.wanted:nth-child(2){animation-delay:.12s}.wanted:nth-child(3){animation-delay:.24s}
 .wanted.red{color:#FCA5A5;border-color:rgba(239,68,68,.4)}
 .wanted.blue{color:#93C5FD;border-color:rgba(59,130,246,.4)}
 .wanted.gold{color:#FCD34D;border-color:rgba(245,158,11,.4)}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.home-menu{position:relative;z-index:1;width:min(440px,100%);margin:0 auto;padding:0 24px calc(var(--sab) + 28px);display:flex;flex-direction:column;gap:11px}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
 
-.home-menu{
-  position:relative;z-index:1;width:min(420px,100%);margin:0 auto;
-  padding:0 24px calc(var(--sab) + 30px);display:flex;flex-direction:column;gap:12px;
-}
-.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-
-/* ================= Lobby ================= */
-.page-head{
-  padding:calc(var(--sat) + 18px) 20px 16px;
-  display:flex;align-items:center;gap:14px;
-}
+/* ===== Lobby / Role (재사용) ===== */
+.page-head{padding:calc(var(--sat) + 18px) 20px 16px;display:flex;align-items:center;gap:14px}
 .page-head h2{font-size:20px;font-weight:800;letter-spacing:-.02em;flex:1}
 .lobby-body{width:min(520px,100%);margin:0 auto;padding:6px 20px calc(var(--sab) + 30px);display:flex;flex-direction:column;gap:14px;flex:1}
 .room-code-card{display:flex;align-items:center;justify-content:space-between;padding:18px 20px}
 .room-code-card .lb{font-size:11px;font-weight:700;letter-spacing:.2em;color:var(--text-faint);margin-bottom:4px}
-.room-code-card .code{font-size:26px;font-weight:900;letter-spacing:.3em;font-variant-numeric:tabular-nums;color:#C7D2FE}
-.player-card{display:flex;align-items:center;gap:14px;padding:16px 18px;position:relative;overflow:hidden}
+.room-code-card .code{font-size:26px;font-weight:900;letter-spacing:.3em;color:#C7D2FE}
+.player-card{display:flex;align-items:center;gap:14px;padding:16px 18px}
 .player-card.me{border-color:rgba(99,102,241,.5);box-shadow:var(--glow-p),var(--shadow)}
-.avatar{
-  width:54px;height:54px;border-radius:18px;flex:none;
-  display:flex;align-items:center;justify-content:center;font-size:27px;
-  background:linear-gradient(135deg,rgba(99,102,241,.3),rgba(139,92,246,.3));
-  border:1px solid rgba(139,92,246,.4);
-}
+.avatar{width:54px;height:54px;border-radius:18px;flex:none;display:flex;align-items:center;justify-content:center;font-size:27px;
+  background:linear-gradient(135deg,rgba(99,102,241,.3),rgba(139,92,246,.3));border:1px solid rgba(139,92,246,.4)}
 .player-card .pinfo{flex:1;min-width:0}
 .player-card .pname{font-size:15.5px;font-weight:800;display:flex;align-items:center;gap:8px}
-.tier{
-  font-size:10px;font-weight:800;letter-spacing:.08em;padding:3px 9px;border-radius:99px;
-  background:linear-gradient(120deg,#F59E0B,#D97706);color:#1a1200;
-}
+.tier{font-size:10px;font-weight:800;letter-spacing:.08em;padding:3px 9px;border-radius:99px;
+  background:linear-gradient(120deg,#F59E0B,#D97706);color:#1a1200}
 .player-card .pstat{font-size:12px;color:var(--text-dim);margin-top:3px}
 .player-card .pstat b{color:#86EFAC}
 .ready-tag{font-size:11px;font-weight:800;letter-spacing:.12em;padding:7px 13px;border-radius:99px}
-.ready-tag.wait{background:rgba(245,158,11,.14);color:#FCD34D;border:1px solid rgba(245,158,11,.35);animation:cityBlink 1.6s infinite}
+.ready-tag.wait{background:rgba(245,158,11,.14);color:#FCD34D;border:1px solid rgba(245,158,11,.35);animation:blink 1.6s infinite}
 .ready-tag.ok{background:rgba(34,197,94,.14);color:#86EFAC;border:1px solid rgba(34,197,94,.4)}
-.slot-empty{
-  display:flex;align-items:center;justify-content:center;gap:10px;min-height:88px;
-  border:1.5px dashed rgba(148,163,184,.3);border-radius:var(--r3);
-  color:var(--text-faint);font-size:13.5px;font-weight:600;
-}
+.slot-empty{display:flex;align-items:center;justify-content:center;gap:10px;min-height:88px;
+  border:1.5px dashed rgba(148,163,184,.3);border-radius:var(--r3);color:var(--text-faint);font-size:13.5px;font-weight:600}
 .slot-empty .spin{width:16px;height:16px;border-radius:50%;border:2px solid rgba(148,163,184,.3);border-top-color:#A5B4FC;animation:spin 1s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* ================= Role Select ================= */
-.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:min(520px,100%);margin:0 auto;padding:10px 20px}
-.role-card{
-  position:relative;overflow:hidden;text-align:center;
-  padding:30px 16px 24px;border-radius:var(--r4);cursor:pointer;
-  background:var(--glass);border:1.5px solid var(--line);
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  transition:transform .35s var(--ease),border-color .3s,box-shadow .3s;
-}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:min(540px,100%);margin:0 auto;padding:10px 20px}
+.role-card{position:relative;overflow:hidden;text-align:center;padding:28px 14px 22px;border-radius:var(--r4);cursor:pointer;
+  background:var(--glass);border:1.5px solid var(--line);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  transition:transform .35s var(--ease),border-color .3s,box-shadow .3s}
 .role-card:hover{transform:translateY(-6px)}
 .role-card:active{transform:scale(.96)}
-.role-card .remoji{font-size:54px;line-height:1;display:block;filter:drop-shadow(0 10px 22px rgba(0,0,0,.5))}
-.role-card h3{margin-top:14px;font-size:19px;font-weight:900}
-.role-card p{margin-top:7px;font-size:12px;color:var(--text-dim);line-height:1.55;word-break:keep-all}
+.role-card .remoji{font-size:50px;line-height:1;display:block;filter:drop-shadow(0 10px 22px rgba(0,0,0,.5))}
+.role-card h3{margin-top:12px;font-size:18px;font-weight:900}
+.role-card p{margin-top:7px;font-size:11.5px;color:var(--text-dim);line-height:1.6;word-break:keep-all}
+.role-card p b{color:var(--text)}
 .role-card.cop:hover{border-color:rgba(59,130,246,.6);box-shadow:0 0 34px rgba(59,130,246,.3),var(--shadow)}
 .role-card.thief:hover{border-color:rgba(239,68,68,.6);box-shadow:0 0 34px rgba(239,68,68,.3),var(--shadow)}
-.role-card .rtag{margin-top:12px;display:inline-block;font-size:10px;font-weight:800;letter-spacing:.14em;padding:5px 11px;border-radius:99px}
+.role-card .rtag{margin-top:11px;display:inline-block;font-size:10px;font-weight:800;letter-spacing:.14em;padding:5px 11px;border-radius:99px}
 .role-card.cop .rtag{background:rgba(59,130,246,.15);color:#93C5FD;border:1px solid rgba(59,130,246,.4)}
 .role-card.thief .rtag{background:rgba(239,68,68,.15);color:#FCA5A5;border:1px solid rgba(239,68,68,.4)}
 
-/* ================= Game ================= */
+/* ===== Game HUD ===== */
 #scr-game{padding-bottom:calc(var(--sab) + 8px)}
-.hud{
-  position:sticky;top:0;z-index:20;
-  padding:calc(var(--sat) + 12px) 14px 10px;
-  display:flex;align-items:center;gap:10px;
-  background:linear-gradient(180deg,rgba(15,23,42,.96) 60%,transparent);
-}
+.hud{position:sticky;top:0;z-index:20;padding:calc(var(--sat) + 10px) 12px 8px;
+  display:flex;flex-direction:column;gap:7px;
+  background:linear-gradient(180deg,rgba(15,23,42,.97) 70%,transparent)}
+.hud-r1{display:flex;align-items:center;gap:10px}
 .hud .turnbox{flex:1;min-width:0}
-.hud .tlabel{font-size:10.5px;font-weight:700;letter-spacing:.16em;color:var(--text-faint)}
-.hud .tval{font-size:15px;font-weight:800;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.hud .tlabel{font-size:10px;font-weight:700;letter-spacing:.16em;color:var(--text-faint)}
+.hud .tval{font-size:14px;font-weight:800;display:flex;align-items:center;gap:8px;white-space:nowrap}
 .turn-pill{font-size:11px;font-weight:800;padding:4px 11px;border-radius:99px}
 .turn-pill.cop{background:rgba(59,130,246,.16);color:#93C5FD;border:1px solid rgba(59,130,246,.4)}
 .turn-pill.thief{background:rgba(239,68,68,.16);color:#FCA5A5;border:1px solid rgba(239,68,68,.4)}
-.timer-wrap{width:92px}
+.timer-wrap{width:84px}
 .timer-txt{font-size:11px;font-weight:700;color:var(--text-dim);text-align:right;font-variant-numeric:tabular-nums}
 .timer-bar{margin-top:4px;height:6px;border-radius:99px;background:rgba(148,163,184,.15);overflow:hidden}
-.timer-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--primary),var(--secondary));transition:width .95s linear,background .3s}
+.timer-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--primary),var(--secondary));transition:width .95s linear}
 .timer-fill.low{background:linear-gradient(90deg,#F59E0B,#EF4444)}
+.hud-r2{display:flex;align-items:center;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.hud-r2::-webkit-scrollbar{display:none}
+.stat-chip{flex:none;display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;
+  padding:7px 13px;border-radius:99px;background:var(--glass);border:1px solid var(--line);white-space:nowrap}
+.stat-chip b{font-variant-numeric:tabular-nums}
+.stat-chip .gold{color:#FCD34D}
+.stat-chip .red{color:#FCA5A5}
+.goal-chip{position:relative;overflow:hidden}
+.goal-chip .gfill{position:absolute;left:0;top:0;bottom:0;background:rgba(245,158,11,.18);transition:width .6s var(--ease)}
+.goal-chip span,.goal-chip b{position:relative}
 
-.board-wrap{position:relative;width:min(860px,100%);margin:0 auto;padding:4px 10px}
-.board-frame{
-  position:relative;border-radius:var(--r4);overflow:hidden;
-  background:
-    radial-gradient(120% 90% at 70% 0%,rgba(99,102,241,.12),transparent 55%),
-    linear-gradient(160deg,#141E33,#0D1526);
-  border:1px solid var(--line);
-  box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.05);
-}
-#boardSvg{display:block;width:100%;height:auto;touch-action:manipulation}
-.edge{stroke-width:3;stroke-linecap:round;opacity:.5}
-.edge.taxi{stroke:#F59E0B}
-.edge.bus{stroke:#22C55E}
+/* ===== Board ===== */
+.board-wrap{position:relative;width:min(860px,100%);margin:0 auto;padding:2px 10px}
+.board-frame{position:relative;border-radius:var(--r4);overflow:hidden;
+  background:radial-gradient(120% 90% at 70% 0%,rgba(99,102,241,.12),transparent 55%),linear-gradient(160deg,#141E33,#0D1526);
+  border:1px solid var(--line);box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.05)}
+#boardSvg{display:block;width:100%;height:auto;touch-action:none;cursor:grab}
+#boardSvg.panning{cursor:grabbing}
+.edge{stroke-width:3;stroke-linecap:round;opacity:.45}
+.edge.taxi{stroke:#F59E0B}.edge.bus{stroke:#22C55E}
 .edge.subway{stroke:#8B5CF6;stroke-dasharray:3 9;stroke-width:4}
-.node{cursor:default}
-.node .base{fill:#1E293B;stroke:rgba(148,163,184,.4);stroke-width:1.5;transition:all .25s}
+.edge.ferry{stroke:#22D3EE;stroke-dasharray:10 8;stroke-width:3.5;opacity:.6}
+.node .base{fill:#1E293B;stroke:rgba(148,163,184,.4);stroke-width:1.5;transition:fill .25s,stroke .25s}
 .node .lab{font-size:11px;font-weight:700;fill:#64748B;text-anchor:middle;pointer-events:none}
 .node .ico{font-size:13px;text-anchor:middle;pointer-events:none}
 .node.special .base{fill:#232F47}
-.node.exit .base{stroke:#F59E0B;stroke-width:2;filter:drop-shadow(0 0 6px rgba(245,158,11,.5))}
+.node .nicon{stroke:#fff;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+.node .nicon.dots{stroke-width:2.6}
+.node .badge-ring{fill:none;stroke:rgba(255,255,255,.35);stroke-width:1;pointer-events:none}
+.node.heist .base{stroke:#F59E0B;stroke-width:2}
+.node.airport .base{stroke:#22D3EE;stroke-width:2.5;filter:drop-shadow(0 0 7px rgba(34,211,238,.6))}
+.node .own{fill:none;stroke-width:3;opacity:0}
+.node.own-cop .own{stroke:#3B82F6;opacity:.95;filter:drop-shadow(0 0 5px rgba(59,130,246,.8))}
+.node.own-thief .own{stroke:#EF4444;opacity:.95;filter:drop-shadow(0 0 5px rgba(239,68,68,.8))}
 .node.candidate{cursor:pointer}
 .node.candidate .base{fill:rgba(99,102,241,.3);stroke:#818CF8;stroke-width:2.5;filter:drop-shadow(0 0 8px rgba(99,102,241,.7))}
 .node.candidate .halo{animation:haloPulse 1.3s ease-out infinite}
+.node.cktarget{cursor:pointer}
+.node.cktarget .base{stroke:#FCD34D;stroke-width:2.5;filter:drop-shadow(0 0 8px rgba(245,158,11,.8))}
 @keyframes haloPulse{0%{r:16;opacity:.8}100%{r:30;opacity:0}}
-.token{pointer-events:none;transition:transform .42s var(--ease)}
+.token{pointer-events:none;transition:transform .4s var(--ease)}
 .token .body{stroke-width:2.5}
 .token.cop .body{fill:#3B82F6;stroke:#BFDBFE;filter:drop-shadow(0 0 9px rgba(59,130,246,.95)) drop-shadow(0 0 22px rgba(59,130,246,.6))}
 .token.thief .body{fill:#EF4444;stroke:#FECACA;filter:drop-shadow(0 0 9px rgba(239,68,68,.95)) drop-shadow(0 0 22px rgba(239,68,68,.6))}
-.token.ghost{opacity:.45}
-.token.ghost .body{fill:none;stroke:#F87171;stroke-dasharray:4 4;filter:none}
+.token.sus{pointer-events:auto;cursor:pointer}
+.token.sus .body{fill:#475569;stroke:#CBD5E1;filter:drop-shadow(0 0 6px rgba(203,213,225,.5))}
+.token.sus.cleared .body{fill:#1E293B;stroke:#334155;filter:none}
+.token.sus.cleared{opacity:.55}
+.token.sus.cctv-mode .body{stroke:#FCD34D;filter:drop-shadow(0 0 10px rgba(245,158,11,.9))}
 .token .em{font-size:14px;text-anchor:middle;pointer-events:none}
+.token .badge{font-size:9px;font-weight:800;text-anchor:middle;fill:#0F172A;pointer-events:none}
 .token.selected .ring{animation:tokPulse 1.1s ease-out infinite}
 @keyframes tokPulse{0%{r:14;opacity:.9}100%{r:26;opacity:0}}
-.board-note{
-  position:absolute;left:50%;top:14px;transform:translateX(-50%);
-  font-size:12px;font-weight:700;padding:9px 18px;border-radius:99px;white-space:nowrap;
-  background:rgba(15,23,42,.85);border:1px solid var(--line);color:#C7D2FE;
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  opacity:0;transition:opacity .3s;pointer-events:none;z-index:3;
-}
+.pin{pointer-events:none;font-size:20px;text-anchor:middle;filter:drop-shadow(0 3px 6px rgba(0,0,0,.6))}
+.pin.ghosty{animation:pinBob 1.6s ease-in-out infinite}
+@keyframes pinBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.board-note{position:absolute;left:50%;top:12px;transform:translateX(-50%);
+  font-size:12px;font-weight:700;padding:9px 18px;border-radius:99px;white-space:nowrap;z-index:3;
+  background:rgba(15,23,42,.88);border:1px solid var(--line);color:#C7D2FE;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:0;transition:opacity .3s;pointer-events:none;max-width:92%;overflow:hidden;text-overflow:ellipsis}
 .board-note.show{opacity:1}
-.legend{display:flex;gap:14px;justify-content:center;padding:10px 0 2px;flex-wrap:wrap}
-.legend span{font-size:11px;font-weight:600;color:var(--text-dim);display:flex;align-items:center;gap:6px}
-.legend i{width:16px;height:3px;border-radius:2px;display:inline-block}
+.zoom-col{position:absolute;right:10px;top:12px;z-index:3;display:flex;flex-direction:column;gap:6px}
+.zbtn{width:34px;height:34px;border-radius:11px;font-size:17px;font-weight:800;
+  background:rgba(15,23,42,.82);border:1px solid var(--line);color:#C7D2FE;
+  display:flex;align-items:center;justify-content:center}
+.minimap{position:absolute;left:10px;bottom:10px;z-index:3;width:104px;height:78px;border-radius:12px;
+  background:rgba(10,16,30,.85);border:1px solid var(--line);overflow:hidden}
+.legend{display:flex;gap:11px;justify-content:center;padding:8px 0 0;flex-wrap:wrap}
+.legend span{font-size:10.5px;font-weight:600;color:var(--text-dim);display:flex;align-items:center;gap:5px}
+.legend i{width:14px;height:3px;border-radius:2px;display:inline-block}
 
-.ctrl-row{
-  width:min(860px,100%);margin:6px auto 0;padding:0 10px;
-  display:flex;gap:10px;align-items:stretch;
-}
-.dice-box{
-  flex:none;width:118px;display:flex;flex-direction:column;align-items:center;gap:8px;
-  padding:14px 10px;
-}
-.dice-stage{width:58px;height:58px;perspective:300px}
+/* ===== Ability / Cards ===== */
+.ab-bar{width:min(860px,100%);margin:6px auto 0;padding:0 10px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.ab-bar::-webkit-scrollbar{display:none}
+.ab-btn{flex:none;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:74px;
+  padding:9px 10px;border-radius:16px;background:var(--glass);border:1px solid var(--line);
+  font-size:10.5px;font-weight:700;color:var(--text-dim);position:relative;
+  transition:transform .25s,border-color .2s}
+.ab-btn:active{transform:scale(.93)}
+.ab-btn .ai{font-size:19px;line-height:1}
+.ab-btn:disabled{opacity:.32;pointer-events:none}
+.ab-btn .cnt{position:absolute;top:-6px;right:-4px;min-width:19px;height:19px;border-radius:99px;
+  background:linear-gradient(130deg,var(--primary),var(--secondary));color:#fff;
+  font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 5px}
+.ab-btn.meet{border-color:rgba(239,68,68,.45)}
+.ab-btn.meet .cnt{background:linear-gradient(130deg,#EF4444,#B91C1C)}
+.ab-btn.card-item{border-color:rgba(245,158,11,.4);color:#FCD34D}
+.ab-btn.armed{border-color:#FCD34D;box-shadow:0 0 14px rgba(245,158,11,.4);color:#FCD34D}
+
+/* ===== Control row ===== */
+.ctrl-row{width:min(860px,100%);margin:6px auto 0;padding:0 10px;display:flex;gap:10px;align-items:stretch}
+.dice-box{flex:none;width:112px;display:flex;flex-direction:column;align-items:center;gap:8px;padding:13px 10px}
+.dice-stage{width:54px;height:54px;perspective:300px}
 .cube{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform 1.1s cubic-bezier(.2,.8,.3,1)}
 .cube.rolling{transition:none;animation:cubeSpin .45s linear infinite}
 @keyframes cubeSpin{to{transform:rotateX(360deg) rotateY(720deg)}}
-.face{
-  position:absolute;inset:0;border-radius:12px;
-  background:linear-gradient(145deg,#312E81,#1E1B4B);
-  border:1.5px solid rgba(165,180,252,.5);
-  display:flex;align-items:center;justify-content:center;
-  font-size:24px;font-weight:900;color:#E0E7FF;
-  box-shadow:inset 0 2px 8px rgba(255,255,255,.1);
-}
-.f1{transform:translateZ(29px)}
-.f2{transform:rotateY(90deg) translateZ(29px)}
-.f3{transform:rotateY(180deg) translateZ(29px)}
-.f4{transform:rotateY(-90deg) translateZ(29px)}
-.f5{transform:rotateX(90deg) translateZ(29px)}
-.f6{transform:rotateX(-90deg) translateZ(29px)}
-.dice-btn{
-  font-size:12.5px;font-weight:800;padding:9px 0;width:100%;border-radius:12px;
+.face{position:absolute;inset:0;border-radius:11px;background:linear-gradient(145deg,#312E81,#1E1B4B);
+  border:1.5px solid rgba(165,180,252,.5);display:flex;align-items:center;justify-content:center;
+  font-size:22px;font-weight:900;color:#E0E7FF;box-shadow:inset 0 2px 8px rgba(255,255,255,.1)}
+.f1{transform:translateZ(27px)}.f2{transform:rotateY(90deg) translateZ(27px)}.f3{transform:rotateY(180deg) translateZ(27px)}
+.f4{transform:rotateY(-90deg) translateZ(27px)}.f5{transform:rotateX(90deg) translateZ(27px)}.f6{transform:rotateX(-90deg) translateZ(27px)}
+.dice-btn{font-size:12.5px;font-weight:800;padding:9px 0;width:100%;border-radius:12px;
   background:linear-gradient(130deg,var(--primary),var(--secondary));color:#fff;
-  box-shadow:0 8px 20px -8px rgba(99,102,241,.7);
-  transition:transform .25s,opacity .2s;
-}
+  box-shadow:0 8px 20px -8px rgba(99,102,241,.7);transition:transform .25s,opacity .2s}
 .dice-btn:disabled{opacity:.35;pointer-events:none}
 .dice-btn:active{transform:scale(.94)}
 .panel-tabs{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
 .tab-row{display:flex;gap:4px;padding:8px 8px 0}
-.tab{
-  flex:1;font-size:12px;font-weight:700;padding:9px 0;border-radius:12px;color:var(--text-dim);
-  transition:background .2s,color .2s;
-}
+.tab{flex:1;font-size:12px;font-weight:700;padding:9px 0;border-radius:12px;color:var(--text-dim);transition:background .2s,color .2s}
 .tab.on{background:rgba(99,102,241,.18);color:#C7D2FE}
-.panel-body{flex:1;overflow-y:auto;padding:10px 14px;min-height:118px;max-height:150px;scrollbar-width:thin}
+.panel-body{flex:1;overflow-y:auto;padding:10px 14px;min-height:108px;max-height:142px;scrollbar-width:thin}
 .log-item{font-size:12.5px;color:var(--text-dim);padding:4px 0;line-height:1.5;animation:fadeUp .4s var(--ease) both}
 .log-item b{color:var(--text)}
-.log-item.cop b{color:#93C5FD}
-.log-item.thief b{color:#FCA5A5}
+.log-item.cop b{color:#93C5FD}.log-item.thief b{color:#FCA5A5}
 .log-item.sys{color:#FCD34D;font-weight:600}
+.log-item.clue{color:#C4B5FD;font-weight:600}
 .chat-row{display:flex;gap:8px;padding:0 10px 10px}
-.chat-row input{
-  flex:1;min-width:0;background:rgba(15,23,42,.7);border:1px solid var(--line);
-  border-radius:12px;color:var(--text);font-size:13px;padding:11px 14px;outline:none;
-}
+.chat-row input{flex:1;min-width:0;background:rgba(15,23,42,.7);border:1px solid var(--line);
+  border-radius:12px;color:var(--text);font-size:13px;padding:11px 14px;outline:none}
 .chat-row input:focus{border-color:rgba(99,102,241,.6)}
-.chat-row button{
-  flex:none;width:46px;border-radius:12px;background:rgba(99,102,241,.2);
-  border:1px solid rgba(99,102,241,.4);display:flex;align-items:center;justify-content:center;
-}
+.chat-row button{flex:none;width:46px;border-radius:12px;background:rgba(99,102,241,.2);
+  border:1px solid rgba(99,102,241,.4);display:flex;align-items:center;justify-content:center}
 .chat-row button svg{width:17px;height:17px;color:#A5B4FC}
 
-/* ================= Win ================= */
+/* ===== Meeting ===== */
+.meet-bg{position:fixed;inset:0;z-index:70;background:rgba(2,6,23,.86);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  display:flex;align-items:center;justify-content:center;padding:18px;animation:fadeIn .35s both;overflow-y:auto}
+.meet{width:min(460px,100%);padding:24px 20px;animation:meetIn .5s var(--ease) both;max-height:92dvh;overflow-y:auto}
+@keyframes meetIn{from{opacity:0;transform:translateY(30px) scale(.94)}to{opacity:1;transform:none}}
+.meet h3{font-size:21px;font-weight:900;text-align:center;letter-spacing:-.01em}
+.meet h3 .em{display:block;font-size:40px;margin-bottom:6px;animation:alarmShake .5s ease-in-out 3}
+@keyframes alarmShake{0%,100%{transform:rotate(0)}25%{transform:rotate(-12deg)}75%{transform:rotate(12deg)}}
+.meet .msub{text-align:center;font-size:12.5px;color:var(--text-dim);margin:6px 0 16px}
+.sus-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sus-card{position:relative;padding:14px 10px;border-radius:18px;text-align:center;cursor:pointer;
+  background:rgba(15,23,42,.6);border:1.5px solid var(--line);transition:border-color .2s,transform .25s}
+.sus-card:active{transform:scale(.95)}
+.sus-card .sa{font-size:32px;line-height:1}
+.sus-card .sn{font-size:13px;font-weight:800;margin-top:6px}
+.sus-card .st{font-size:10.5px;color:var(--text-dim);margin-top:2px;min-height:14px}
+.sus-card.cleared{opacity:.45;pointer-events:none}
+.sus-card.cleared .st{color:#86EFAC}
+.sus-card.me-sus{border-color:rgba(239,68,68,.55)}
+.sus-card.voted{border-color:#FCD34D;box-shadow:0 0 16px rgba(245,158,11,.35)}
+.sus-card .votes{position:absolute;top:-7px;right:-5px;min-width:20px;height:20px;border-radius:99px;
+  background:#EF4444;color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 6px}
+.sus-bar{margin-top:7px;height:5px;border-radius:99px;background:rgba(148,163,184,.15);overflow:hidden}
+.sus-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#F59E0B,#EF4444)}
+.evi-box{margin-top:14px;text-align:left;background:rgba(15,23,42,.55);border:1px solid var(--line);
+  border-radius:16px;padding:12px 14px;max-height:120px;overflow-y:auto}
+.evi-box h4{font-size:11px;font-weight:800;letter-spacing:.14em;color:#FCD34D;margin-bottom:7px}
+.evi-box div{font-size:12px;color:var(--text-dim);padding:2.5px 0;line-height:1.5}
+.evi-box div b{color:var(--text)}
+.meet-actions{margin-top:16px;display:flex;gap:9px}
+.meet-actions .btn{flex:1;min-height:50px;font-size:14px}
+
+/* ===== Overlay result (체포/알림) ===== */
+.flash-ov{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;
+  background:rgba(2,6,23,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  animation:fadeIn .25s both;padding:24px}
+.flash-card{text-align:center;padding:34px 30px;width:min(360px,100%);animation:meetIn .45s var(--ease) both}
+.flash-card .fe{font-size:62px;line-height:1;animation:winPop .7s var(--ease) both}
+.flash-card h3{font-size:22px;font-weight:900;margin-top:12px}
+.flash-card p{font-size:13px;color:var(--text-dim);margin-top:7px;line-height:1.6;word-break:keep-all}
+.flash-card p b{color:#FCD34D}
+@keyframes winPop{0%{transform:scale(0) rotate(-30deg)}70%{transform:scale(1.15) rotate(6deg)}100%{transform:scale(1)}}
+
+/* ===== Win ===== */
 #scr-win{position:relative;align-items:center;justify-content:center;text-align:center;padding:40px 24px;overflow:hidden}
 #fxCanvas{position:absolute;inset:0;pointer-events:none}
-.win-wrap{position:relative;z-index:1;width:min(440px,100%);display:flex;flex-direction:column;gap:16px}
-.win-emoji{font-size:76px;line-height:1;animation:winPop .8s var(--ease) both;filter:drop-shadow(0 16px 30px rgba(0,0,0,.6))}
-@keyframes winPop{0%{transform:scale(0) rotate(-30deg)}70%{transform:scale(1.15) rotate(6deg)}100%{transform:scale(1) rotate(0)}}
-.win-title{
-  font-size:clamp(30px,8vw,42px);font-weight:900;letter-spacing:-.02em;
-  animation:fadeUp .7s var(--ease) .15s both;
-}
+.win-wrap{position:relative;z-index:1;width:min(440px,100%);display:flex;flex-direction:column;gap:15px}
+.win-emoji{font-size:72px;line-height:1;animation:winPop .8s var(--ease) both;filter:drop-shadow(0 16px 30px rgba(0,0,0,.6))}
+.win-title{font-size:clamp(28px,8vw,40px);font-weight:900;letter-spacing:-.02em;animation:fadeUp .7s var(--ease) .15s both}
 .win-title.cop{background:linear-gradient(120deg,#93C5FD,#6366F1);-webkit-background-clip:text;background-clip:text;color:transparent}
 .win-title.thief{background:linear-gradient(120deg,#FCA5A5,#F59E0B);-webkit-background-clip:text;background-clip:text;color:transparent}
-.win-sub{color:var(--text-dim);font-size:14px;animation:fadeUp .7s var(--ease) .25s both}
+.win-sub{color:var(--text-dim);font-size:13.5px;animation:fadeUp .7s var(--ease) .25s both;word-break:keep-all}
 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;animation:fadeUp .7s var(--ease) .35s both}
-.stat{padding:16px 10px;border-radius:var(--r2);text-align:center}
-.stat .sv{font-size:24px;font-weight:900;font-variant-numeric:tabular-nums}
-.stat .sv.gold{color:#FCD34D}
-.stat .sv.purple{color:#C4B5FD}
-.stat .sl{font-size:11px;font-weight:600;color:var(--text-faint);margin-top:3px;letter-spacing:.06em}
+.stat{padding:15px 10px;border-radius:var(--r2);text-align:center}
+.stat .sv{font-size:22px;font-weight:900;font-variant-numeric:tabular-nums}
+.stat .sv.gold{color:#FCD34D}.stat .sv.purple{color:#C4B5FD}
+.stat .sl{font-size:10.5px;font-weight:600;color:var(--text-faint);margin-top:3px;letter-spacing:.05em}
 .xp-bar-box{text-align:left;padding:14px 18px;animation:fadeUp .7s var(--ease) .45s both}
 .xp-bar-box .xl{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--text-dim);margin-bottom:8px}
 .xp-track{height:9px;border-radius:99px;background:rgba(148,163,184,.14);overflow:hidden}
-.xp-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),#FBBF24);width:0;transition:width 1.4s var(--ease) .4s}
+.xp-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold),#FBBF24);width:0;transition:width 1.4s var(--ease) .4s}
 .win-btns{display:flex;flex-direction:column;gap:10px;animation:fadeUp .7s var(--ease) .55s both}
 
-/* ================= Ranking ================= */
+/* ===== Rank / Shop ===== */
 .rank-body{width:min(520px,100%);margin:0 auto;padding:4px 20px calc(var(--sab) + 30px);display:flex;flex-direction:column;gap:10px;flex:1}
 .rank-item{display:flex;align-items:center;gap:13px;padding:13px 16px;animation:fadeUp .5s var(--ease) both}
 .rank-item .rno{width:30px;font-size:16px;font-weight:900;color:var(--text-faint);text-align:center;flex:none}
-.rank-item.top1 .rno{color:#FCD34D}
-.rank-item.top2 .rno{color:#CBD5E1}
-.rank-item.top3 .rno{color:#D8A47F}
+.rank-item.top1 .rno{color:#FCD34D}.rank-item.top2 .rno{color:#CBD5E1}.rank-item.top3 .rno{color:#D8A47F}
 .rank-item .avatar{width:42px;height:42px;border-radius:14px;font-size:21px}
 .rank-item .rinfo{flex:1;min-width:0}
 .rank-item .rn{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rank-item .rw{font-size:11.5px;color:var(--text-dim)}
 .rank-item .rxp{font-size:13px;font-weight:800;color:#C4B5FD;font-variant-numeric:tabular-nums}
 .rank-item.me-row{border-color:rgba(99,102,241,.55);box-shadow:var(--glow-p),var(--shadow)}
+.shop-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;width:min(520px,100%);margin:0 auto;padding:4px 20px calc(var(--sab)+30px)}
+.shop-item{padding:18px 8px 14px;border-radius:20px;text-align:center;cursor:pointer;
+  background:var(--glass);border:1.5px solid var(--line);transition:transform .25s,border-color .2s}
+.shop-item:active{transform:scale(.94)}
+.shop-item .se{font-size:36px;line-height:1}
+.shop-item .sn{font-size:12px;font-weight:800;margin-top:8px}
+.shop-item .sp{font-size:11px;font-weight:700;color:#FCD34D;margin-top:3px}
+.shop-item.owned .sp{color:#86EFAC}
+.shop-item.equipped{border-color:rgba(34,197,94,.6);box-shadow:0 0 16px rgba(34,197,94,.25)}
+.pts-chip{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:800;color:#FCD34D;
+  padding:8px 16px;border-radius:99px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.35)}
 
-/* ================= Modal / Toast ================= */
-.modal-bg{
-  position:fixed;inset:0;z-index:60;background:rgba(2,6,23,.7);
+/* ===== Modal / Toast ===== */
+.modal-bg{position:fixed;inset:0;z-index:60;background:rgba(2,6,23,.7);
   backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  display:flex;align-items:center;justify-content:center;padding:24px;
-  animation:fadeIn .3s both;
-}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.modal{
-  width:min(380px,100%);padding:28px 24px;text-align:center;
-  animation:modalIn .45s var(--ease) both;
-}
-@keyframes modalIn{from{opacity:0;transform:translateY(26px) scale(.95)}to{opacity:1;transform:none}}
+  display:flex;align-items:center;justify-content:center;padding:24px;animation:fadeIn .3s both}
+.modal{width:min(380px,100%);padding:26px 22px;text-align:center;animation:meetIn .45s var(--ease) both}
 .modal h3{font-size:19px;font-weight:800;margin-bottom:6px}
-.modal p{font-size:13px;color:var(--text-dim);margin-bottom:18px}
-.modal input{
-  width:100%;text-align:center;font-size:22px;font-weight:800;letter-spacing:.3em;
+.modal p{font-size:13px;color:var(--text-dim);margin-bottom:18px;line-height:1.6;word-break:keep-all}
+.modal p b{color:#FCD34D}
+.modal input{width:100%;text-align:center;font-size:22px;font-weight:800;letter-spacing:.3em;
   background:rgba(15,23,42,.7);border:1.5px solid var(--line);border-radius:16px;
-  color:var(--text);padding:14px;outline:none;text-transform:uppercase;margin-bottom:14px;
-}
-.modal input:focus{border-color:rgba(99,102,241,.7);box-shadow:0 0 0 4px rgba(99,102,241,.15)}
-.toast{
-  position:fixed;left:50%;bottom:calc(var(--sab) + 34px);transform:translate(-50%,16px);
+  color:var(--text);padding:14px;outline:none;text-transform:uppercase;margin-bottom:14px}
+.modal input:focus{border-color:rgba(99,102,241,.7)}
+.modal .mrow{display:flex;gap:10px}
+.modal .mrow .btn{flex:1;min-height:50px;font-size:14px}
+.toast{position:fixed;left:50%;bottom:calc(var(--sab) + 30px);transform:translate(-50%,16px);
   background:rgba(30,41,59,.95);border:1px solid var(--line);color:var(--text);
   font-size:13px;font-weight:600;padding:12px 22px;border-radius:99px;z-index:99;
   opacity:0;pointer-events:none;transition:all .4s var(--ease);white-space:nowrap;
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  box-shadow:var(--shadow);
-}
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:var(--shadow);max-width:92vw;overflow:hidden;text-overflow:ellipsis}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
-@media (min-width:720px){
-  .panel-body{max-height:190px}
-}
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
-}
+@media (min-width:720px){.panel-body{max-height:180px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
 
-<!-- ================= HOME ================= -->
+<!-- ============ HOME ============ -->
 <section class="scr active" id="scr-home">
   <div class="bg-anim">
     <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
-    <div class="grid-floor"></div>
+    <div class="skyline"></div>
+    <span class="neon n1">BAR·NEO</span><span class="neon n2">CASINO</span><span class="neon n3">HOTEL</span>
     <div id="cityDots"></div>
   </div>
-
   <header class="home-top">
-    <div class="logo-sm">🎩 <span>CATCH&nbsp;THE&nbsp;THIEF</span></div>
+    <div class="logo-sm">🎩 <span>CITY&nbsp;UNDERCOVER</span></div>
     <div class="online-chip"><span class="dot"></span><b id="onlineCnt">1,024</b>명 접속 중</div>
   </header>
-
   <div class="hero">
     <div class="hero-hat">🎩</div>
     <h1>Catch The Thief</h1>
-    <p class="sub">도시 어딘가에 숨은 도둑 — <b>추리하고, 추격하고, 탈출하라</b></p>
+    <div class="ver">CITY UNDERCOVER</div>
+    <p class="sub">시민 4명 중 1명이 도둑이다 — <b>추리하고, 벌어들이고, 탈출하라</b></p>
     <div class="wanted-row">
-      <span class="wanted red">🚨 WANTED</span>
-      <span class="wanted blue">👮 POLICE</span>
-      <span class="wanted gold">💰 REWARD</span>
+      <span class="wanted red">🕵️ 은닉 이동</span>
+      <span class="wanted blue">🗳 긴급 투표</span>
+      <span class="wanted gold">💰 도시 경영</span>
     </div>
   </div>
-
   <div class="home-menu">
     <button class="btn btn-pri" id="btnQuick">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-      게임 시작
+      퀵 매치
     </button>
     <div class="menu-grid">
-      <button class="btn btn-glass" id="btnCreate">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-        방 만들기
-      </button>
-      <button class="btn btn-glass" id="btnJoin">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
-        방 참가
-      </button>
+      <button class="btn btn-glass" id="btnCreate">＋ 방 만들기</button>
+      <button class="btn btn-glass" id="btnJoin">⇥ 방 참가</button>
     </div>
-    <button class="btn btn-glass" id="btnRank">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8m-4-4v4M6 4h12v5a6 6 0 0 1-12 0z"/><path d="M6 6H4a2 2 0 0 0 2 5m12-5h2a2 2 0 0 1-2 5"/></svg>
-      랭킹
-    </button>
+    <div class="menu-grid">
+      <button class="btn btn-glass" id="btnRank">🏆 랭킹</button>
+      <button class="btn btn-glass" id="btnShop">🛍 상점</button>
+    </div>
   </div>
 </section>
 
-<!-- ================= LOBBY ================= -->
+<!-- ============ LOBBY ============ -->
 <section class="scr" id="scr-lobby">
   <header class="page-head">
-    <button class="icon-btn" data-nav="scr-home" aria-label="뒤로">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-    </button>
-    <h2>게임 로비</h2>
-    <span class="chip">WAITING ROOM</span>
+    <button class="icon-btn" data-nav="scr-home" aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+    <h2>게임 로비</h2><span class="chip">WAITING ROOM</span>
   </header>
-
   <div class="lobby-body">
     <div class="glass room-code-card">
-      <div>
-        <div class="lb">ROOM CODE</div>
-        <div class="code" id="roomCode">A3X9QD</div>
-      </div>
-      <button class="icon-btn" id="copyCode" aria-label="코드 복사">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-      </button>
+      <div><div class="lb">ROOM CODE</div><div class="code" id="roomCode">A3X9QD</div></div>
+      <button class="icon-btn" id="copyCode" aria-label="코드 복사"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
     </div>
-
     <div class="glass player-card me">
       <div class="avatar" id="myAvatar">🕵️</div>
       <div class="pinfo">
@@ -497,7 +468,6 @@ input{font-family:inherit}
       </div>
       <span class="ready-tag wait" id="myReady">WAITING</span>
     </div>
-
     <div class="glass player-card" id="oppCard" hidden>
       <div class="avatar" id="oppAvatar">🦹</div>
       <div class="pinfo">
@@ -507,202 +477,227 @@ input{font-family:inherit}
       <span class="ready-tag ok">READY</span>
     </div>
     <div class="slot-empty" id="oppSlot"><span class="spin"></span>상대 플레이어를 기다리는 중…</div>
-
     <div style="flex:1"></div>
-    <button class="btn btn-ok" id="btnReady" disabled>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m4.5 12.5 5 5 10-11"/></svg>
-      READY
-    </button>
+    <button class="btn btn-ok" id="btnReady" disabled>✓ READY</button>
   </div>
 </section>
 
-<!-- ================= ROLE SELECT ================= -->
+<!-- ============ ROLE ============ -->
 <section class="scr" id="scr-role">
   <header class="page-head">
-    <button class="icon-btn" data-nav="scr-home" aria-label="뒤로">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-    </button>
-    <h2>진영 선택</h2>
-    <span class="chip">CHOOSE SIDE</span>
+    <button class="icon-btn" data-nav="scr-home" aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+    <h2>진영 선택</h2><span class="chip">CHOOSE SIDE</span>
   </header>
-  <p style="text-align:center;color:var(--text-dim);font-size:13.5px;padding:4px 30px 14px;word-break:keep-all">
-    경찰이 되어 도둑을 추적하거나, 도둑이 되어 포위망을 뚫고 탈출하세요.
+  <p style="text-align:center;color:var(--text-dim);font-size:13px;padding:2px 30px 12px;word-break:keep-all">
+    시민 4명 중 1명이 도둑입니다. 10턴 안에 승부를 내세요.
   </p>
   <div class="role-grid">
     <div class="role-card cop" id="pickCop">
-      <span class="remoji">👮‍♂️</span>
-      <h3>경찰</h3>
-      <p>단서를 추리해 도둑의 위치를 좁혀라.<br><b>14턴 안에 체포</b>하면 승리!</p>
-      <span class="rtag">POLICE · CHASER</span>
+      <span class="remoji">👮‍♂️</span><h3>경찰</h3>
+      <p>CCTV·드론·GPS로 수사하고<br><b>긴급회의 투표</b>로 도둑을 체포하라.<br>무고한 시민 체포 시 <b>평판 하락!</b></p>
+      <span class="rtag">POLICE · DETECTIVE</span>
     </div>
     <div class="role-card thief" id="pickThief">
-      <span class="remoji">🦹</span>
-      <h3>도둑</h3>
-      <p>은신하며 경찰을 따돌려라.<br><b>탈출구 도달</b> 또는 <b>14턴 생존</b> 시 승리!</p>
-      <span class="rtag">THIEF · RUNNER</span>
+      <span class="remoji">🦹</span><h3>도둑</h3>
+      <p>시민으로 위장해 은행을 털어라.<br><b>₩30만</b> 모으면 공항 탈출 가능.<br><b>10턴 생존</b>해도 승리!</p>
+      <span class="rtag">THIEF · UNDERCOVER</span>
     </div>
   </div>
-  <p style="text-align:center;color:var(--text-faint);font-size:12px;padding:16px 30px">
-    💡 도둑의 위치는 <b style="color:#FCD34D">3턴마다 한 번</b>만 공개됩니다
+  <p style="text-align:center;color:var(--text-faint);font-size:11.5px;padding:14px 30px;word-break:keep-all">
+    💡 부동산을 구매하면 경찰은 <b style="color:#93C5FD">CCTV 강화</b>, 도둑은 <b style="color:#FCA5A5">은신처</b> 효과
   </p>
 </section>
 
-<!-- ================= GAME ================= -->
+<!-- ============ GAME ============ -->
 <section class="scr" id="scr-game">
   <div class="hud">
-    <button class="icon-btn" id="gameExit" aria-label="나가기">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-    </button>
-    <div class="turnbox">
-      <div class="tlabel">TURN <span id="hudTurn">1</span> / 14</div>
-      <div class="tval"><span class="turn-pill thief" id="hudWho">🦹 도둑의 턴</span></div>
+    <div class="hud-r1">
+      <button class="icon-btn" id="gameExit" aria-label="나가기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+      <div class="turnbox">
+        <div class="tlabel">TURN <span id="hudTurn">1</span> / 10</div>
+        <div class="tval"><span class="turn-pill thief" id="hudWho">🦹 도둑의 턴</span></div>
+      </div>
+      <button class="icon-btn" id="bgmBtn" aria-label="음악">🔊</button>
+      <div class="timer-wrap">
+        <div class="timer-txt"><span id="hudTime">30</span>s</div>
+        <div class="timer-bar"><div class="timer-fill" id="hudTimeFill" style="width:100%"></div></div>
+      </div>
     </div>
-    <div class="timer-wrap">
-      <div class="timer-txt"><span id="hudTime">25</span>s</div>
-      <div class="timer-bar"><div class="timer-fill" id="hudTimeFill" style="width:100%"></div></div>
-    </div>
+    <div class="hud-r2" id="hudStats"></div>
   </div>
 
   <div class="board-wrap">
     <div class="board-frame">
-      <div class="board-note" id="boardNote">주사위를 굴려주세요</div>
-      <svg id="boardSvg" viewBox="0 0 1000 720" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div class="board-note" id="boardNote"></div>
+      <div class="zoom-col">
+        <button class="zbtn" id="zIn">＋</button>
+        <button class="zbtn" id="zOut">－</button>
+        <button class="zbtn" id="zReset" style="font-size:12px">⤢</button>
+      </div>
+      <svg id="boardSvg" viewBox="0 0 1000 760" xmlns="http://www.w3.org/2000/svg"></svg>
+      <svg class="minimap" id="minimap" viewBox="0 0 1000 760" preserveAspectRatio="none"></svg>
     </div>
     <div class="legend">
       <span><i style="background:#F59E0B"></i>택시</span>
       <span><i style="background:#22C55E"></i>버스</span>
       <span><i style="background:#8B5CF6"></i>지하철</span>
-      <span>🚪 탈출구</span><span>🏦 은행</span><span>🚓 경찰서</span><span>⚓ 항구</span>
+      <span><i style="background:#22D3EE"></i>페리</span>
+      <span>🛫 공항</span><span>🏦 은행</span><span>🎰 카지노</span>
     </div>
   </div>
 
+  <div class="ab-bar" id="abBar"></div>
+
   <div class="ctrl-row">
     <div class="glass dice-box">
-      <div class="dice-stage">
-        <div class="cube" id="cube">
-          <div class="face f1">1</div><div class="face f2">2</div><div class="face f3">3</div>
-          <div class="face f4">4</div><div class="face f5">5</div><div class="face f6">6</div>
-        </div>
-      </div>
+      <div class="dice-stage"><div class="cube" id="cube">
+        <div class="face f1">1</div><div class="face f2">2</div><div class="face f3">3</div>
+        <div class="face f4">4</div><div class="face f5">5</div><div class="face f6">6</div>
+      </div></div>
       <button class="dice-btn" id="rollBtn">🎲 주사위</button>
     </div>
     <div class="glass panel-tabs">
       <div class="tab-row">
-        <button class="tab on" data-tab="log">행동 이력</button>
+        <button class="tab on" data-tab="log">수사 기록</button>
         <button class="tab" data-tab="chat">채팅</button>
       </div>
       <div class="panel-body" id="logPanel"></div>
       <div class="panel-body" id="chatPanel" hidden></div>
       <div class="chat-row" id="chatRow" hidden>
         <input id="chatInput" maxlength="60" placeholder="메시지 입력…">
-        <button id="chatSend" aria-label="전송">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/></svg>
-        </button>
+        <button id="chatSend" aria-label="전송"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/></svg></button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ================= WIN ================= -->
+<!-- ============ WIN ============ -->
 <section class="scr" id="scr-win">
   <canvas id="fxCanvas"></canvas>
   <div class="win-wrap">
     <div class="win-emoji" id="winEmoji">🚓</div>
     <h2 class="win-title cop" id="winTitle">경찰 승리!</h2>
-    <p class="win-sub" id="winSub">도둑을 체포했습니다. 도시에 평화가 찾아왔습니다.</p>
+    <p class="win-sub" id="winSub"></p>
     <div class="stat-grid">
       <div class="glass stat"><div class="sv" id="stMoves">0</div><div class="sl">총 이동 수</div></div>
-      <div class="glass stat"><div class="sv" id="stTurns">0</div><div class="sl">생존 턴 수</div></div>
+      <div class="glass stat"><div class="sv" id="stTurns">0</div><div class="sl">진행 턴 수</div></div>
       <div class="glass stat"><div class="sv gold" id="stPts">+0</div><div class="sl">획득 포인트</div></div>
       <div class="glass stat"><div class="sv purple" id="stXp">+0</div><div class="sl">XP</div></div>
     </div>
     <div class="glass xp-bar-box">
-      <div class="xl"><span id="xpTierLbl">BRONZE</span><span id="xpTxt">0 / 100 XP</span></div>
+      <div class="xl"><span id="xpTierLbl">BRONZE</span><span id="xpTxt">0 / 120 XP</span></div>
       <div class="xp-track"><div class="xp-fill" id="xpFill"></div></div>
     </div>
     <div class="win-btns">
-      <button class="btn btn-pri" id="btnAgain">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.6-6.3"/><path d="M3 4v5h5"/></svg>
-        게임 다시하기
-      </button>
+      <button class="btn btn-pri" id="btnAgain">↻ 게임 다시하기</button>
       <button class="btn btn-glass" data-nav="scr-home">홈으로</button>
     </div>
   </div>
 </section>
 
-<!-- ================= RANKING ================= -->
+<!-- ============ RANK ============ -->
 <section class="scr" id="scr-rank">
   <header class="page-head">
-    <button class="icon-btn" data-nav="scr-home" aria-label="뒤로">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-    </button>
-    <h2>랭킹</h2>
-    <span class="chip">LEADERBOARD</span>
+    <button class="icon-btn" data-nav="scr-home" aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+    <h2>랭킹</h2><span class="chip">LEADERBOARD</span>
   </header>
   <div class="rank-body" id="rankBody"></div>
+</section>
+
+<!-- ============ SHOP ============ -->
+<section class="scr" id="scr-shop">
+  <header class="page-head">
+    <button class="icon-btn" data-nav="scr-home" aria-label="뒤로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+    <h2>상점</h2>
+    <span class="pts-chip">🪙 <b id="shopPts">0</b> P</span>
+  </header>
+  <p style="text-align:center;color:var(--text-dim);font-size:12.5px;padding:0 30px 14px">게임에서 획득한 포인트로 아바타를 구매하세요</p>
+  <div class="shop-grid" id="shopGrid"></div>
 </section>
 
 <div class="toast" id="toast"></div>
 <div class="modal-bg" id="joinModal" hidden>
   <div class="glass modal">
-    <h3>방 참가</h3>
-    <p>친구에게 받은 6자리 방 코드를 입력하세요</p>
+    <h3>방 참가</h3><p>친구에게 받은 6자리 방 코드를 입력하세요</p>
     <input id="joinInput" maxlength="6" placeholder="------" autocomplete="off">
-    <div style="display:flex;gap:10px">
-      <button class="btn btn-glass" style="flex:1" id="joinCancel">취소</button>
-      <button class="btn btn-pri" style="flex:1" id="joinGo">참가</button>
+    <div class="mrow">
+      <button class="btn btn-glass" id="joinCancel">취소</button>
+      <button class="btn btn-pri" id="joinGo">참가</button>
     </div>
   </div>
 </div>
-
+<div class="modal-bg" id="buyModal" hidden>
+  <div class="glass modal">
+    <h3 id="buyTitle">🏪 상점 구매</h3>
+    <p id="buyDesc"></p>
+    <div class="mrow">
+      <button class="btn btn-glass" id="buyPass">패스</button>
+      <button class="btn btn-pri" id="buyGo">구매</button>
+    </div>
+  </div>
+</div>
+<div class="meet-bg" id="meetBg" hidden></div>
+<div class="flash-ov" id="flashOv" hidden></div>
 <script>
 "use strict";
-/* ================================================================
-   🎩 Catch The Thief — single-file build
-   Scotland Yard 스타일 턴제 추리 보드게임 (vs AI)
-================================================================ */
-const $ = s=>document.querySelector(s);
-const $$ = s=>[...document.querySelectorAll(s)];
-const rnd = n=>Math.floor(Math.random()*n);
-const sleep = ms=>new Promise(r=>setTimeout(r,ms));
+/* ============================================================
+   🎩 City Undercover — Scotland Yard × Among Us × 모두의마블
+============================================================ */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const rnd=n=>Math.floor(Math.random()*n);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 
-/* ---------------- Sound (WebAudio 합성) ---------------- */
+/* ---------- Sound ---------- */
 let AC=null;
-function ac(){ if(!AC) AC=new (window.AudioContext||window.webkitAudioContext)(); if(AC.state==="suspended")AC.resume(); return AC; }
-function tone(freq,dur=.12,type="sine",vol=.18,when=0){
-  try{
-    const a=ac(),o=a.createOscillator(),g=a.createGain();
-    o.type=type;o.frequency.value=freq;
-    g.gain.setValueAtTime(vol,a.currentTime+when);
-    g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+when+dur);
-    o.connect(g).connect(a.destination);
-    o.start(a.currentTime+when);o.stop(a.currentTime+when+dur+.02);
-  }catch(e){}
+function ac(){if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();return AC}
+function tone(f,d=.12,t="sine",v=.16,w=0){
+  try{const a=ac(),o=a.createOscillator(),g=a.createGain();
+  o.type=t;o.frequency.value=f;
+  g.gain.setValueAtTime(v,a.currentTime+w);
+  g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+w+d);
+  o.connect(g).connect(a.destination);o.start(a.currentTime+w);o.stop(a.currentTime+w+d+.02)}catch(e){}
 }
 const SFX={
-  click(){tone(620,.07,"triangle",.14)},
-  dice(){for(let i=0;i<6;i++)tone(300+rnd(500),.05,"square",.08,i*.09)},
-  diceEnd(){tone(520,.1,"triangle",.2);tone(780,.16,"triangle",.18,.08)},
-  move(){tone(440,.08,"sine",.12);tone(550,.08,"sine",.1,.07)},
-  catch(){tone(660,.14,"sawtooth",.2);tone(440,.16,"sawtooth",.2,.13);tone(220,.4,"sawtooth",.22,.26)},
-  escape(){[523,659,784,1047].forEach((f,i)=>tone(f,.22,"triangle",.2,i*.12))},
-  notify(){tone(880,.1,"sine",.16);tone(1174,.14,"sine",.14,.1)},
-  alarm(){tone(988,.12,"square",.12);tone(740,.12,"square",.12,.14)}
+  click(){tone(620,.07,"triangle",.13)},
+  dice(){for(let i=0;i<6;i++)tone(300+rnd(500),.05,"square",.07,i*.09)},
+  diceEnd(){tone(520,.1,"triangle",.18);tone(780,.16,"triangle",.16,.08)},
+  move(){tone(440,.07,"sine",.1);tone(550,.07,"sine",.09,.06)},
+  cash(){tone(880,.08,"triangle",.16);tone(1174,.1,"triangle",.15,.07);tone(1568,.14,"triangle",.13,.14)},
+  catch(){tone(660,.14,"sawtooth",.18);tone(440,.16,"sawtooth",.18,.13);tone(220,.4,"sawtooth",.2,.26)},
+  escape(){[523,659,784,1047].forEach((f,i)=>tone(f,.22,"triangle",.18,i*.12))},
+  notify(){tone(880,.1,"sine",.14);tone(1174,.14,"sine",.12,.1)},
+  siren(){for(let i=0;i<3;i++){tone(988,.16,"square",.1,i*.34);tone(740,.16,"square",.1,i*.34+.17)}},
+  alarm(){tone(988,.12,"square",.11);tone(740,.12,"square",.11,.14)},
+  vote(){tone(392,.12,"triangle",.15);tone(523,.18,"triangle",.15,.12)}
 };
+/* 긴장감 BGM — 미니 시퀀서 */
+let bgmOn=true,bgmTimer=null,bgmStep=0;
+const BASS=[55,55,65.4,49];
+function bgmTick(){
+  if(!bgmOn)return;
+  const b=BASS[(bgmStep>>2)%4];
+  tone(b,.22,"triangle",.07);
+  if(bgmStep%2===0)tone(2200,.03,"square",.015);
+  if(bgmStep%8===6)tone(b*3,.14,"sine",.04);
+  bgmStep++;
+}
+function bgmStart(){if(bgmTimer)return;try{ac()}catch(e){return}bgmTimer=setInterval(bgmTick,250)}
+function bgmStop(){clearInterval(bgmTimer);bgmTimer=null}
+$("#bgmBtn").addEventListener("click",()=>{
+  bgmOn=!bgmOn;$("#bgmBtn").textContent=bgmOn?"🔊":"🔇";
+  if(bgmOn)bgmStart();else bgmStop();
+});
 
-/* ---------------- Profile (localStorage) ---------------- */
-const AVATARS=["🕵️","🧑‍✈️","🦊","🐺","🐱","🦅","🧙","🥷"];
+/* ---------- Profile ---------- */
 function loadProfile(){
-  let p;
-  try{p=JSON.parse(localStorage.getItem("ctt_profile"))}catch(e){}
-  if(!p){
-    p={name:"Agent"+(100+rnd(900)),avatar:AVATARS[rnd(AVATARS.length)],games:0,wins:0,xp:0};
-    saveProfile(p);
-  }
+  let p;try{p=JSON.parse(localStorage.getItem("cu_profile"))}catch(e){}
+  if(!p)p={name:"Agent"+(100+rnd(900)),avatar:"🕵️",games:0,wins:0,xp:0,pts:0,skins:["🕵️"]};
+  p.pts=p.pts||0;p.skins=p.skins||["🕵️"];
   return p;
 }
-function saveProfile(p){try{localStorage.setItem("ctt_profile",JSON.stringify(p))}catch(e){}}
+function saveProfile(p){try{localStorage.setItem("cu_profile",JSON.stringify(p))}catch(e){}}
 function tierOf(xp){
+  if(xp>=2000)return["MASTER","linear-gradient(120deg,#F472B6,#8B5CF6)"];
   if(xp>=1200)return["DIAMOND","linear-gradient(120deg,#67E8F9,#3B82F6)"];
   if(xp>=700)return["PLATINUM","linear-gradient(120deg,#E2E8F0,#94A3B8)"];
   if(xp>=350)return["GOLD","linear-gradient(120deg,#F59E0B,#D97706)"];
@@ -711,312 +706,470 @@ function tierOf(xp){
 }
 let profile=loadProfile();
 
-/* ---------------- Board Data ---------------- */
-/* 노드: Scotland Yard 느낌의 도시 맵 */
+/* ---------- Map ---------- */
+/* t: bank카지노 등 / buy: 구매가(만원) / heist: 절도 수익(만원) */
 const NODES=[
-  {id:1,x:95,y:120},{id:2,x:265,y:75,t:"bank"},{id:3,x:440,y:110},{id:4,x:620,y:70},{id:5,x:790,y:115},{id:6,x:925,y:195,t:"port"},
-  {id:7,x:150,y:265},{id:8,x:325,y:230},{id:9,x:505,y:255,t:"police"},{id:10,x:685,y:225},{id:11,x:865,y:320},
-  {id:12,x:85,y:430,t:"exit"},{id:13,x:255,y:390},{id:14,x:430,y:410},{id:15,x:605,y:385},{id:16,x:775,y:445},
-  {id:17,x:185,y:575,t:"exit"},{id:18,x:365,y:560},{id:19,x:545,y:585},{id:20,x:725,y:570},{id:21,x:895,y:555,t:"exit"},
-  {id:22,x:470,y:675}
+  {id:1,x:95,y:115,t:"shop",buy:6},{id:2,x:255,y:72,t:"bank",buy:12,heist:12},{id:3,x:435,y:105},
+  {id:4,x:618,y:66,t:"mall",buy:9,heist:6},{id:5,x:790,y:112,t:"shop",buy:6},{id:6,x:925,y:188,t:"port"},
+  {id:7,x:148,y:258,t:"hotel",buy:10},{id:8,x:322,y:226,t:"metro"},{id:9,x:505,y:252,t:"police"},
+  {id:10,x:688,y:218,t:"metro"},{id:11,x:865,y:315,t:"land",buy:15,heist:9},
+  {id:12,x:82,y:422,t:"casino"},{id:13,x:252,y:388},{id:14,x:432,y:408,t:"land",buy:15,heist:9},
+  {id:15,x:605,y:382,t:"bank",buy:12,heist:12},{id:16,x:775,y:442,t:"hotel",buy:10},
+  {id:17,x:182,y:572,t:"port"},{id:18,x:362,y:558,t:"metro"},{id:19,x:545,y:582,t:"mall",buy:9,heist:6},
+  {id:20,x:725,y:566,t:"metro"},{id:21,x:895,y:552,t:"airport"},{id:22,x:470,y:676,t:"shop",buy:6}
 ];
 const EDGES=[
-  [1,2,"taxi"],[2,3,"taxi"],[3,4,"taxi"],[4,5,"taxi"],[5,6,"taxi"],
-  [1,7,"bus"],[2,8,"bus"],[3,9,"bus"],[4,10,"bus"],[6,11,"bus"],[5,10,"taxi"],
+  [1,2,"taxi"],[2,3,"taxi"],[3,4,"taxi"],[4,5,"taxi"],[5,6,"taxi"],[5,10,"taxi"],
   [7,8,"taxi"],[8,9,"taxi"],[9,10,"taxi"],[10,11,"taxi"],
-  [7,12,"bus"],[8,13,"bus"],[9,14,"bus"],[10,15,"bus"],[11,16,"bus"],
   [12,13,"taxi"],[13,14,"taxi"],[14,15,"taxi"],[15,16,"taxi"],
-  [12,17,"bus"],[13,18,"bus"],[14,19,"bus"],[15,20,"bus"],[16,21,"bus"],
   [17,18,"taxi"],[18,19,"taxi"],[19,20,"taxi"],[20,21,"taxi"],
   [18,22,"taxi"],[19,22,"taxi"],[20,22,"taxi"],
-  [2,9,"subway"],[9,19,"subway"],[4,15,"subway"],[13,22,"subway"],[6,16,"subway"]
+  [1,7,"bus"],[2,8,"bus"],[3,9,"bus"],[4,10,"bus"],[6,11,"bus"],
+  [7,12,"bus"],[8,13,"bus"],[9,14,"bus"],[10,15,"bus"],[11,16,"bus"],
+  [12,17,"bus"],[13,18,"bus"],[14,19,"bus"],[15,20,"bus"],[16,21,"bus"],
+  [8,10,"subway"],[8,18,"subway"],[10,20,"subway"],[18,20,"subway"],
+  [6,17,"ferry"]
 ];
-const ADJ={};
-NODES.forEach(n=>ADJ[n.id]=[]);
-EDGES.forEach(([a,b])=>{ADJ[a].push(b);ADJ[b].push(a)});
+const ADJ={};NODES.forEach(n=>ADJ[n.id]=[]);
+const ETYPE={};
+EDGES.forEach(([a,b,t])=>{ADJ[a].push(b);ADJ[b].push(a);ETYPE[a+"-"+b]=t;ETYPE[b+"-"+a]=t});
 const NODE={};NODES.forEach(n=>NODE[n.id]=n);
-const EXITS=NODES.filter(n=>n.t==="exit").map(n=>n.id);
-const START_COP=9, START_THIEF=2;
-const TURN_LIMIT=14, REVEAL_EVERY=3, TURN_SECONDS=25;
-const TYPE_META={bank:["🏦","은행"],police:["🚓","경찰서"],port:["⚓","항구"],exit:["🚪","탈출구"]};
-
+const META={bank:["🏦","은행"],police:["🚓","경찰서"],metro:["🚇","지하철"],port:["⚓","항구"],
+  airport:["🛫","공항"],casino:["🎰","카지노"],mall:["🛍","쇼핑몰"],land:["🗼","랜드마크"],
+  shop:["🏪","상점"],hotel:["🏨","호텔"]};
+const TRANS={taxi:"🚕 택시",bus:"🚌 버스",subway:"🚇 지하철",ferry:"🛥 페리"};
+const START_COP=9,START_THIEF=2,TURN_LIMIT=10,REVEAL_EVERY=3,TURN_SECONDS=30;
+const GOAL_UNLOCK=30,GOAL_WIN=50; // 만원 단위 ×10 = 30만/50만
 function bfs(from){
   const dist={[from]:0},par={},q=[from];
-  while(q.length){
-    const c=q.shift();
-    for(const nb of ADJ[c]) if(!(nb in dist)){dist[nb]=dist[c]+1;par[nb]=c;q.push(nb)}
-  }
-  return {dist,par};
+  while(q.length){const c=q.shift();for(const nb of ADJ[c])if(!(nb in dist)){dist[nb]=dist[c]+1;par[nb]=c;q.push(nb)}}
+  return{dist,par};
 }
-function reachable(from,steps){
-  const {dist}=bfs(from);
-  return NODES.map(n=>n.id).filter(id=>id!==from && dist[id]<=steps);
-}
-function pathTo(from,to){
-  const {par}=bfs(from);
-  const path=[to];let c=to;
-  while(c!==from && par[c]!==undefined){c=par[c];path.unshift(c)}
-  return path;
-}
+const reachable=(f,s)=>{const{dist}=bfs(f);return NODES.map(n=>n.id).filter(id=>id!==f&&dist[id]<=s)};
+function pathTo(f,t){const{par}=bfs(f);const p=[t];let c=t;while(c!==f&&par[c]!==undefined){c=par[c];p.unshift(c)}return p}
 const distBetween=(a,b)=>bfs(a).dist[b]??99;
+const quadrant=id=>{const n=NODE[id];return (n.y<380?(n.x<500?"A(북서)":"B(북동)"):(n.x<500?"C(남서)":"D(남동)"))};
 
-/* ---------------- Board Rendering ---------------- */
-function renderBoard(){
-  const svg=$("#boardSvg");
-  const NS="http://www.w3.org/2000/svg";
-  svg.innerHTML="";
-  // edges
-  for(const [a,b,type] of EDGES){
-    const l=document.createElementNS(NS,"line");
-    l.setAttribute("x1",NODE[a].x);l.setAttribute("y1",NODE[a].y);
-    l.setAttribute("x2",NODE[b].x);l.setAttribute("y2",NODE[b].y);
-    l.setAttribute("class","edge "+type);
-    svg.appendChild(l);
+/* ---------- Board render ---------- */
+const NS="http://www.w3.org/2000/svg";
+function el(tag,attrs){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);return e}
+/* 타입별 [밝은색, 어두운색, 아이콘 path, 점(pip) path] — 24x24 라인아트 */
+const NICON={
+  bank:["#FCD34D","#B45309","M12 3 4 8.6h16L12 3zM5.5 11.2v6.3M10 11.2v6.3M14 11.2v6.3M18.5 11.2v6.3M4 20.5h16"],
+  police:["#60A5FA","#1D4ED8","M12 3.5 18.5 6v4.8c0 4.6-3 7.7-6.5 9.2-3.5-1.5-6.5-4.6-6.5-9.2V6L12 3.5zM9.3 11.3l2 2 3.5-4"],
+  metro:["#A78BFA","#6D28D9","M7 4.5h10a2 2 0 0 1 2 2v8a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3v-8a2 2 0 0 1 2-2zM5 11.2h14M9.5 21l-1.3-2.5M14.5 21l1.3-2.5","M9 15h.01M15 15h.01"],
+  port:["#22D3EE","#0E7490","M12 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM12 8v13M5 12H2.5a9.5 9.5 0 0 0 19 0H19"],
+  airport:["#67E8F9","#0284C7","M3 21h18M6.2 16.8 3.8 12l1.9-.9 2.4 1.4 2.9-1-3.3-5.6 1.9-.9 5.7 5.2 4.2-1.4c.9-.3 1.9.2 2.2 1.1.3.9-.2 1.9-1.1 2.2L6.2 16.8z"],
+  casino:["#F472B6","#9D174D","M7 3.5h10A3.5 3.5 0 0 1 20.5 7v10a3.5 3.5 0 0 1-3.5 3.5H7A3.5 3.5 0 0 1 3.5 17V7A3.5 3.5 0 0 1 7 3.5z","M8.2 8.2h.01M15.8 8.2h.01M12 12h.01M8.2 15.8h.01M15.8 15.8h.01"],
+  mall:["#FB923C","#C2410C","M6.5 7.5h11L19 20.5H5L6.5 7.5zM9 10.5V6.5a3 3 0 0 1 6 0v4"],
+  land:["#FBBF24","#D97706","M12 3c2.2 6 3.2 10.5 5.5 17.5M12 3C9.8 9 8.8 13.5 6.5 20.5M8.8 13.5h6.4M7.2 17.8h9.6M10.3 8.5h3.4"],
+  shop:["#34D399","#059669","M4.5 9.5v-2L6.5 4h11l2 3.5v2M4.5 9.5a2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0M6 13v7.5h12V13M10 20.5V16h4v4.5"],
+  hotel:["#818CF8","#4F46E5","M3 19.5V9M3 15.5h18v4M21 15.5v-3a2 2 0 0 0-2-2h-8.5V15M6.75 12.25a1.75 1.75 0 1 0 0-3.5 1.75 1.75 0 0 0 0 3.5z"]
+};
+function boardDefs(){
+  const d=el("defs",{});
+  for(const t in NICON){
+    const[c1,c2]=NICON[t];
+    const g=el("linearGradient",{id:"ng-"+t,x1:"0",y1:"0",x2:"0",y2:"1"});
+    g.appendChild(el("stop",{offset:"0",["stop-color"]:c1}));
+    g.appendChild(el("stop",{offset:"1",["stop-color"]:c2}));
+    d.appendChild(g);
   }
-  // nodes
+  return d;
+}
+function renderBoard(){
+  const svg=$("#boardSvg");svg.innerHTML="";
+  svg.appendChild(boardDefs());
+  for(const [a,b,t] of EDGES)
+    svg.appendChild(el("line",{x1:NODE[a].x,y1:NODE[a].y,x2:NODE[b].x,y2:NODE[b].y,class:"edge "+t}));
   for(const n of NODES){
-    const g=document.createElementNS(NS,"g");
-    g.setAttribute("class","node"+(n.t?" special":"")+(n.t==="exit"?" exit":""));
+    const g=el("g",{class:"node"+(n.t?" special":"")+(n.heist?" heist":"")+(n.t==="airport"?" airport":"")});
     g.dataset.id=n.id;
-    const halo=document.createElementNS(NS,"circle");
-    halo.setAttribute("class","halo");halo.setAttribute("cx",n.x);halo.setAttribute("cy",n.y);
-    halo.setAttribute("r",16);halo.setAttribute("fill","none");
-    halo.setAttribute("stroke","#818CF8");halo.setAttribute("stroke-width","2");halo.setAttribute("opacity","0");
-    const c=document.createElementNS(NS,"circle");
-    c.setAttribute("class","base");c.setAttribute("cx",n.x);c.setAttribute("cy",n.y);c.setAttribute("r",n.t?19:15);
-    const lab=document.createElementNS(NS,"text");
-    lab.setAttribute("class","lab");lab.setAttribute("x",n.x);lab.setAttribute("y",n.y+(n.t?40:34));
-    lab.textContent=n.t?TYPE_META[n.t][1]:n.id;
-    g.appendChild(halo);g.appendChild(c);
-    if(n.t){
-      const ico=document.createElementNS(NS,"text");
-      ico.setAttribute("class","ico");ico.setAttribute("x",n.x);ico.setAttribute("y",n.y+5);
-      ico.textContent=TYPE_META[n.t][0];
-      g.appendChild(ico);
+    g.appendChild(el("circle",{class:"own",cx:n.x,cy:n.y,r:n.t?25:21}));
+    g.appendChild(el("circle",{class:"halo",cx:n.x,cy:n.y,r:16,fill:"none",stroke:"#818CF8","stroke-width":2,opacity:0}));
+    g.appendChild(el("circle",{class:"base",cx:n.x,cy:n.y,r:n.t?19:15}));
+    if(n.t&&NICON[n.t]){
+      const[c1,c2,path,pips]=NICON[n.t];
+      const badge=el("circle",{cx:n.x,cy:n.y,r:13,fill:`url(#ng-${n.t})`});
+      badge.style.filter=`drop-shadow(0 0 7px ${c1}99)`;
+      g.appendChild(badge);
+      g.appendChild(el("circle",{class:"badge-ring",cx:n.x,cy:n.y,r:12.2}));
+      const ig=el("g",{transform:`translate(${n.x-9},${n.y-9}) scale(0.75)`});
+      ig.appendChild(el("path",{class:"nicon",d:path}));
+      if(pips)ig.appendChild(el("path",{class:"nicon dots",d:pips}));
+      g.appendChild(ig);
+    }else if(n.t){
+      const i=el("text",{class:"ico",x:n.x,y:n.y+5});i.textContent=META[n.t][0];g.appendChild(i);
     }else{
-      const num=document.createElementNS(NS,"text");
-      num.setAttribute("x",n.x);num.setAttribute("y",n.y+4);
-      num.setAttribute("text-anchor","middle");
-      num.setAttribute("style","font-size:10px;font-weight:700;fill:#7C8BA8;pointer-events:none");
-      num.textContent=n.id;
-      g.appendChild(num);
+      const num=el("text",{x:n.x,y:n.y+4,"text-anchor":"middle",style:"font-size:10px;font-weight:700;fill:#7C8BA8;pointer-events:none"});
+      num.textContent=n.id;g.appendChild(num);
     }
-    g.appendChild(lab);
+    const lab=el("text",{class:"lab",x:n.x,y:n.y+(n.t?40:34)});
+    lab.textContent=n.t?META[n.t][1]:"";g.appendChild(lab);
     g.addEventListener("click",()=>onNodeClick(n.id));
     svg.appendChild(g);
   }
-  // tokens
-  svg.appendChild(makeToken("ghost","👁"));
-  svg.appendChild(makeToken("thief","🦹"));
-  svg.appendChild(makeToken("cop","👮"));
+  // pins
+  const ghost=el("text",{id:"pin-ghost",class:"pin ghosty"});ghost.textContent="📍";ghost.style.opacity=0;svg.appendChild(ghost);
+  const fake=el("text",{id:"pin-fake",class:"pin ghosty"});fake.textContent="📍";fake.style.opacity=0;svg.appendChild(fake);
+  const ck=el("text",{id:"pin-ck",class:"pin"});ck.textContent="🚧";ck.style.opacity=0;svg.appendChild(ck);
+  // suspects + cop
+  for(let i=0;i<4;i++)svg.appendChild(makeSuspect(i));
+  svg.appendChild(makeCop());
+  renderMinimap();
 }
-function makeToken(kind,emoji){
-  const NS="http://www.w3.org/2000/svg";
-  const g=document.createElementNS(NS,"g");
-  g.setAttribute("class","token "+(kind==="ghost"?"ghost thief":kind));
-  g.id="tok-"+kind;
-  const ring=document.createElementNS(NS,"circle");
-  ring.setAttribute("class","ring");ring.setAttribute("r",14);
-  ring.setAttribute("fill","none");
-  ring.setAttribute("stroke",kind==="cop"?"#60A5FA":"#F87171");
-  ring.setAttribute("stroke-width","2");ring.setAttribute("opacity","0");
-  const body=document.createElementNS(NS,"circle");
-  body.setAttribute("class","body");body.setAttribute("r",13);
-  const em=document.createElementNS(NS,"text");
-  em.setAttribute("class","em");em.setAttribute("y",5);em.textContent=emoji;
-  g.appendChild(ring);g.appendChild(body);g.appendChild(em);
+function makeSuspect(i){
+  const g=el("g",{class:"token sus",id:"tok-s"+i});
+  g.appendChild(el("circle",{class:"ring",r:14,fill:"none",stroke:"#F87171","stroke-width":2,opacity:0}));
+  g.appendChild(el("circle",{class:"body",r:13}));
+  const em=el("text",{class:"em",y:5});em.textContent="👤";g.appendChild(em);
+  const bg=el("circle",{cx:10,cy:-10,r:7,fill:"#CBD5E1"});g.appendChild(bg);
+  const b=el("text",{class:"badge",x:10,y:-7});b.textContent="ABCD"[i];g.appendChild(b);
+  g.style.opacity=0;
+  g.addEventListener("click",ev=>{ev.stopPropagation();onSuspectClick(i)});
+  return g;
+}
+function makeCop(){
+  const g=el("g",{class:"token cop",id:"tok-cop"});
+  g.appendChild(el("circle",{class:"ring",r:14,fill:"none",stroke:"#60A5FA","stroke-width":2,opacity:0}));
+  g.appendChild(el("circle",{class:"body",r:13}));
+  const em=el("text",{class:"em",y:5});em.textContent="👮";g.appendChild(em);
   g.style.opacity=0;
   return g;
 }
-function placeToken(kind,nodeId,visible=true){
-  const g=$("#tok-"+kind);
+function moveEl(id,nodeId,visible=true){
+  const g=$("#"+id);if(!g)return;
   if(nodeId==null||!visible){g.style.opacity=0;return}
-  const n=NODE[nodeId];
-  g.style.opacity=1;
+  const n=NODE[nodeId];g.style.opacity=1;
   g.style.transform=`translate(${n.x}px,${n.y}px)`;
 }
-function setSelected(kind,on){
-  const g=$("#tok-"+kind);
-  g.classList.toggle("selected",on);
-  g.querySelector(".ring").setAttribute("opacity",on?"0.9":"0");
+function setPin(id,nodeId){
+  const p=$("#"+id);if(!p)return;
+  if(nodeId==null){p.style.opacity=0;return}
+  const n=NODE[nodeId];
+  p.setAttribute("x",n.x);p.setAttribute("y",n.y-24);p.style.opacity=1;
+}
+function setOwnRing(nodeId,owner){
+  const g=$(`#boardSvg .node[data-id="${nodeId}"]`)||$$("#boardSvg .node").find(x=>+x.dataset.id===nodeId);
+  if(!g)return;
+  g.classList.toggle("own-cop",owner==="cop");
+  g.classList.toggle("own-thief",owner==="thief");
 }
 
-/* ---------------- Game State ---------------- */
-const G={
-  role:null,        // "cop" | "thief"  (플레이어 진영)
-  copPos:START_COP, thiefPos:START_THIEF,
-  lastSeen:START_THIEF,   // 도둑 마지막 공개 위치
-  turn:1, phase:"idle",   // idle | dice | pick | anim
-  actor:null,             // "thief" | "cop" — 현재 행동 주체
-  dice:0, candidates:[],
-  moves:0, playerMoves:0,
-  timer:null, timeLeft:TURN_SECONDS,
-  over:false
-};
+/* ---------- Zoom / Pan / Minimap ---------- */
+const VB0={x:0,y:0,w:1000,h:760};
+let vb={...VB0};
+function applyVB(){
+  $("#boardSvg").setAttribute("viewBox",`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
+  const r=$("#mmRect");
+  if(r){r.setAttribute("x",vb.x);r.setAttribute("y",vb.y);r.setAttribute("width",vb.w);r.setAttribute("height",vb.h)}
+}
+function zoomAt(cx,cy,f){
+  const w=Math.max(300,Math.min(1000,vb.w*f));
+  const h=w*0.76;
+  vb.x=Math.max(0,Math.min(1000-w,cx-(cx-vb.x)*(w/vb.w)));
+  vb.y=Math.max(0,Math.min(760-h,cy-(cy-vb.y)*(h/vb.h)));
+  vb.w=w;vb.h=h;applyVB();
+}
+function renderMinimap(){
+  const mm=$("#minimap");mm.innerHTML="";
+  mm.appendChild(el("rect",{x:0,y:0,width:1000,height:760,fill:"rgba(20,30,51,.9)"}));
+  for(const n of NODES)mm.appendChild(el("circle",{cx:n.x,cy:n.y,r:9,fill:n.t==="airport"?"#22D3EE":n.heist?"#F59E0B":"#475569"}));
+  mm.appendChild(el("rect",{id:"mmRect",x:0,y:0,width:1000,height:760,fill:"none",stroke:"#A5B4FC","stroke-width":14,rx:20}));
+}
+(function initPan(){
+  const svg=$("#boardSvg");
+  let dragging=false,sx=0,sy=0,moved=0;
+  const toSvg=(e)=>{const r=svg.getBoundingClientRect();return[vb.x+(e.clientX-r.left)/r.width*vb.w,vb.y+(e.clientY-r.top)/r.height*vb.h]};
+  svg.addEventListener("pointerdown",e=>{dragging=true;moved=0;sx=e.clientX;sy=e.clientY;svg.classList.add("panning")});
+  addEventListener("pointermove",e=>{
+    if(!dragging)return;
+    const r=svg.getBoundingClientRect();
+    const dx=(e.clientX-sx)/r.width*vb.w,dy=(e.clientY-sy)/r.height*vb.h;
+    moved+=Math.abs(e.clientX-sx)+Math.abs(e.clientY-sy);
+    sx=e.clientX;sy=e.clientY;
+    vb.x=Math.max(0,Math.min(1000-vb.w,vb.x-dx));
+    vb.y=Math.max(0,Math.min(760-vb.h,vb.y-dy));
+    applyVB();
+  });
+  addEventListener("pointerup",()=>{dragging=false;svg.classList.remove("panning");
+    if(moved>14){suppressClick=true;setTimeout(()=>suppressClick=false,80)}});
+  svg.addEventListener("wheel",e=>{e.preventDefault();const[cx,cy]=toSvg(e);zoomAt(cx,cy,e.deltaY>0?1.15:0.87)},{passive:false});
+  $("#zIn").addEventListener("click",()=>zoomAt(vb.x+vb.w/2,vb.y+vb.h/2,.8));
+  $("#zOut").addEventListener("click",()=>zoomAt(vb.x+vb.w/2,vb.y+vb.h/2,1.25));
+  $("#zReset").addEventListener("click",()=>{vb={...VB0};applyVB()});
+})();
+let suppressClick=false;
 
-/* ---------------- UI helpers ---------------- */
+/* ---------- UI helpers ---------- */
 let toastTimer;
-function toast(m){
-  const t=$("#toast");t.textContent=m;t.classList.add("show");
-  clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),2200);
-}
-function note(m,hold=false){
-  const n=$("#boardNote");
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),2400)}
+function note(m,hold=false){const n=$("#boardNote");
   if(!m){n.classList.remove("show");return}
   n.textContent=m;n.classList.add("show");
-  if(!hold)setTimeout(()=>n.classList.remove("show"),2200);
-}
-function log(msg,cls=""){
-  const p=$("#logPanel");
-  const d=document.createElement("div");
-  d.className="log-item "+cls;
-  d.innerHTML=msg;
-  p.appendChild(d);p.scrollTop=p.scrollHeight;
-}
-function chatMsg(who,msg,cls=""){
-  const p=$("#chatPanel");
-  const d=document.createElement("div");
-  d.className="log-item "+cls;
-  d.innerHTML=`<b>${who}</b> ${msg}`;
-  p.appendChild(d);p.scrollTop=p.scrollHeight;
-}
-function show(id){
-  $$(".scr").forEach(s=>s.classList.remove("active"));
-  $("#"+id).classList.add("active");
-  window.scrollTo({top:0});
-}
+  if(!hold)setTimeout(()=>n.classList.remove("show"),2400)}
+function log(msg,cls=""){const p=$("#logPanel");const d=document.createElement("div");
+  d.className="log-item "+cls;d.innerHTML=msg;p.appendChild(d);p.scrollTop=p.scrollHeight}
+function chatMsg(who,msg,cls=""){const p=$("#chatPanel");const d=document.createElement("div");
+  d.className="log-item "+cls;d.innerHTML=`<b>${who}</b> ${msg}`;p.appendChild(d);p.scrollTop=p.scrollHeight}
+function show(id){$$(".scr").forEach(s=>s.classList.remove("active"));$("#"+id).classList.add("active");window.scrollTo({top:0})}
 $$("[data-nav]").forEach(b=>b.addEventListener("click",()=>{SFX.click();stopTimer();show(b.dataset.nav)}));
-
-/* ---------------- Dice ---------------- */
-const CUBE_ROT={1:[0,0],2:[0,-90],3:[0,-180],4:[0,90],5:[-90,0],6:[90,0]};
-let cubeSpins=0;
-function rollDiceAnim(value){
+function flashCard(emoji,title,desc,ms=2200){
   return new Promise(res=>{
-    const cube=$("#cube");
-    SFX.dice();
-    cube.classList.add("rolling");
-    if(navigator.vibrate)try{navigator.vibrate([30,40,30,40,60])}catch(e){}
-    // 숫자 플리커
-    const faces=$$("#cube .face");
-    const flick=setInterval(()=>faces.forEach(f=>f.textContent=1+rnd(6)),80);
-    setTimeout(()=>{
-      clearInterval(flick);
-      faces.forEach((f,i)=>f.textContent=i+1);
-      cube.classList.remove("rolling");
-      cubeSpins++;
-      const [rx,ry]=CUBE_ROT[value];
-      cube.style.transform=`rotateX(${rx+360*cubeSpins}deg) rotateY(${ry+360*cubeSpins}deg) scale(1)`;
-      SFX.diceEnd();
-      setTimeout(res,1150);
-    },850);
+    const ov=$("#flashOv");
+    ov.innerHTML=`<div class="glass flash-card"><div class="fe">${emoji}</div><h3>${title}</h3><p>${desc}</p></div>`;
+    ov.hidden=false;
+    setTimeout(()=>{ov.hidden=true;res()},ms);
   });
 }
 
-/* ---------------- Turn Timer ---------------- */
-function startTimer(onExpire){
-  stopTimer();
-  G.timeLeft=TURN_SECONDS;
-  updateTimerUI();
-  G.timer=setInterval(()=>{
-    G.timeLeft--;
-    updateTimerUI();
-    if(G.timeLeft<=5&&G.timeLeft>0)SFX.click();
-    if(G.timeLeft<=0){stopTimer();onExpire&&onExpire()}
-  },1000);
-}
-function stopTimer(){if(G.timer){clearInterval(G.timer);G.timer=null}}
-function updateTimerUI(){
-  $("#hudTime").textContent=G.timeLeft;
-  const f=$("#hudTimeFill");
-  f.style.width=(G.timeLeft/TURN_SECONDS*100)+"%";
-  f.classList.toggle("low",G.timeLeft<=8);
+/* ---------- Dice ---------- */
+const CUBE_ROT={1:[0,0],2:[0,-90],3:[0,-180],4:[0,90],5:[-90,0],6:[90,0]};
+let cubeSpins=0;
+function rollDiceAnim(v){
+  return new Promise(res=>{
+    const cube=$("#cube");SFX.dice();cube.classList.add("rolling");
+    if(navigator.vibrate)try{navigator.vibrate([30,40,30,40,60])}catch(e){}
+    const faces=$$("#cube .face");
+    const flick=setInterval(()=>faces.forEach(f=>f.textContent=1+rnd(6)),80);
+    setTimeout(()=>{
+      clearInterval(flick);faces.forEach((f,i)=>f.textContent=i+1);
+      cube.classList.remove("rolling");cubeSpins++;
+      const[rx,ry]=CUBE_ROT[v];
+      cube.style.transform=`rotateX(${rx+360*cubeSpins}deg) rotateY(${ry+360*cubeSpins}deg)`;
+      SFX.diceEnd();setTimeout(res,1100);
+    },800);
+  });
 }
 
-/* ---------------- Game Flow ---------------- */
-function startGame(role){
-  G.role=role;
-  G.copPos=START_COP;G.thiefPos=START_THIEF;G.lastSeen=START_THIEF;
-  G.turn=1;G.moves=0;G.playerMoves=0;G.over=false;G.phase="idle";
-  renderBoard();
+/* ---------- Timer ---------- */
+const G={};
+function startTimer(onExpire){
+  stopTimer();G.timeLeft=TURN_SECONDS;updateTimerUI();
+  G.timer=setInterval(()=>{G.timeLeft--;updateTimerUI();
+    if(G.timeLeft<=5&&G.timeLeft>0)SFX.click();
+    if(G.timeLeft<=0){stopTimer();onExpire&&onExpire()}},1000);
+}
+function stopTimer(){if(G.timer){clearInterval(G.timer);G.timer=null}}
+function updateTimerUI(){$("#hudTime").textContent=G.timeLeft;
+  const f=$("#hudTimeFill");f.style.width=(G.timeLeft/TURN_SECONDS*100)+"%";
+  f.classList.toggle("low",G.timeLeft<=8)}
+/* ---------- Game State ---------- */
+const SUS_NAMES=[["미호","👩‍💼"],["준","🧑‍💼"],["하나","👩‍🦰"],["도윤","🧔"]];
+function newGame(role){
+  Object.assign(G,{
+    role,turn:1,actor:null,phase:"idle",dice:0,candidates:[],over:false,
+    copPos:START_COP,ti:rnd(4),
+    sus:[],owned:{},looted:{},ghost:null,fake:null,checkpoint:null,
+    thiefMoney:5,copMoney:10,rep:3,meetings:2,
+    clue:[],moves:0,playerMoves:0,
+    ab:{cctv:2,drone:1,gps:1,ck:1, dis:1,wipe:2,fakeLoc:1,tunnel:1},
+    cards:[],nextBonus:0,nextDouble:false,thiefDebuff:0,
+    disguised:false,wipeThisTurn:false,hideoutTurn:false,
+    susp:[10+rnd(10),10+rnd(10),10+rnd(10),10+rnd(10)],
+    cleared:[false,false,false,false],
+    droneDead:false,armedCard:null,ckMode:false,cctvMode:false,
+    aiEst:START_THIEF,timeLeft:TURN_SECONDS,timer:null
+  });
+  // 용의자 배치: 도둑은 은행(2), 시민은 랜덤
+  const spots=[1,3,5,13,16,22].sort(()=>Math.random()-.5);
+  for(let i=0;i<4;i++){
+    G.sus.push({pos:i===G.ti?START_THIEF:spots.pop(),name:SUS_NAMES[i][0],emoji:SUS_NAMES[i][1]});
+  }
+  renderBoard();vb={...VB0};applyVB();
   $("#logPanel").innerHTML="";$("#chatPanel").innerHTML="";
-  refreshTokens();
-  $("#hudTurn").textContent=G.turn;
+  refreshTokens();renderAbilities();renderHud();
+  $("#hudTurn").textContent=1;
   show("scr-game");
-  log(`🎮 게임 시작! 당신은 <b>${role==="cop"?"👮 경찰":"🦹 도둑"}</b>입니다.`,"sys");
+  bgmStart();
+  log(`🎮 당신은 <b>${role==="cop"?"👮 경찰":"🦹 도둑"}</b>입니다.`,"sys");
   log(role==="cop"
-    ?`도둑의 시작 위치는 🏦 은행. 위치는 ${REVEAL_EVERY}턴마다 공개됩니다.`
-    :`🚪 탈출구 3곳 중 한 곳에 도달하거나 ${TURN_LIMIT}턴 생존하면 승리!`,"sys");
-  chatMsg("SYSTEM","좋은 승부 되세요! 🎲","sys");
-  setTimeout(()=>{
-    chatMsg(G.role==="cop"?"🦹 그림자":"👮 K형사",
-      G.role==="cop"?"날 잡을 수 있을 것 같아? 😏":"이 도시 끝까지 쫓아간다. 🚨");
-    SFX.notify();
-  },1800);
+    ?`시민 A·B·C·D 중 <b>1명이 도둑</b>입니다. CCTV로 신원을 조회하고, 긴급회의 투표 또는 현장 검거로 체포하세요. 무고한 시민을 체포하면 평판이 떨어집니다!`
+    :`은행·랜드마크를 털어 <b>₩30만</b>을 모으면 🛫 공항이 열립니다. ₩50만 달성 또는 10턴 생존 시에도 승리!`,"sys");
+  chatMsg("SYSTEM","긴급회의는 🚨 버튼으로 소집할 수 있습니다.","sys");
+  setTimeout(()=>{chatMsg(role==="cop"?"🦹 ???":"👮 K형사",
+    role==="cop"?"난 이미 시민들 속에 섞여 있지. 😏":"이 도시의 CCTV는 모두 내 눈이다.");SFX.notify()},1600);
   nextActor("thief");
 }
+const thief=()=>G.sus[G.ti];
+
+/* ---------- Tokens / HUD ---------- */
 function refreshTokens(){
-  placeToken("cop",G.copPos,true);
-  const revealNow=(G.role==="thief")||(G.turn%REVEAL_EVERY===0);
-  placeToken("thief",G.thiefPos,G.role==="thief"||revealNow&&G.actor!=="pre");
-  // 경찰 플레이 시: 숨은 도둑 대신 lastSeen 고스트
-  if(G.role==="cop"){
-    const thiefVisible=(G.turn%REVEAL_EVERY===0);
-    placeToken("thief",G.thiefPos,thiefVisible);
-    placeToken("ghost",thiefVisible?null:G.lastSeen,!thiefVisible);
+  moveEl("tok-cop",G.copPos,true);
+  for(let i=0;i<4;i++){
+    const g=$("#tok-s"+i);
+    g.classList.toggle("cleared",G.cleared[i]);
+    if(G.role==="thief"&&i===G.ti){
+      g.classList.remove("sus");g.classList.add("thief");
+      g.querySelector(".em").textContent="🦹";
+    }
+    moveEl("tok-s"+i,G.sus[i].pos,true);
+  }
+  setPin("pin-ghost",G.ghost);
+  setPin("pin-fake",G.fake);
+  setPin("pin-ck",G.checkpoint);
+  for(const n of NODES)setOwnRing(n.id,G.owned[n.id]||null);
+}
+function renderHud(){
+  const h=$("#hudStats");
+  const goalPct=Math.min(100,G.thiefMoney/GOAL_UNLOCK*100);
+  if(G.role==="thief"){
+    h.innerHTML=`
+      <span class="stat-chip goal-chip"><span class="gfill" style="width:${goalPct}%"></span><span>💰</span><b class="gold">₩${G.thiefMoney}만</b><span style="color:var(--text-faint)">/ ₩${GOAL_UNLOCK}만 ${G.thiefMoney>=GOAL_UNLOCK?"🛫 OPEN":"🔒"}</span></span>
+      <span class="stat-chip">🚔 경찰 평판 <b class="red">${"❤".repeat(G.rep)}${"🖤".repeat(3-G.rep)}</b></span>
+      <span class="stat-chip">🃏 카드 <b>${G.cards.length}</b></span>`;
   }else{
-    placeToken("ghost",null,false);
-    placeToken("thief",G.thiefPos,true);
+    h.innerHTML=`
+      <span class="stat-chip">💼 수사비 <b class="gold">₩${G.copMoney}만</b></span>
+      <span class="stat-chip">🚔 평판 <b class="red">${"❤".repeat(G.rep)}${"🖤".repeat(3-G.rep)}</b></span>
+      <span class="stat-chip">🚨 회의 <b>${G.meetings}</b>회</span>
+      <span class="stat-chip">🃏 카드 <b>${G.cards.length}</b></span>`;
   }
 }
-function setHud(){
+function setHudWho(){
   $("#hudTurn").textContent=G.turn;
   const w=$("#hudWho");
-  if(G.actor==="thief"){w.textContent="🦹 도둑의 턴";w.className="turn-pill thief"}
-  else{w.textContent="👮 경찰의 턴";w.className="turn-pill cop"}
+  if(G.actor==="thief"){w.textContent=G.role==="thief"?"🦹 나의 턴":"🦹 도둑의 턴";w.className="turn-pill thief"}
+  else{w.textContent=G.role==="cop"?"👮 나의 턴":"👮 경찰의 턴";w.className="turn-pill cop"}
 }
+
+/* ---------- Abilities & Cards UI ---------- */
+const COP_ABS=[
+  ["cctv","📹","CCTV 감시","용의자 1명의 신원을 조회합니다"],
+  ["drone","🛰","드론 수색","도둑이 있는 구역을 알려줍니다"],
+  ["gps","📍","GPS 스캔","도둑의 현재 위치를 공개합니다"],
+  ["ck","🚔","검문소","지정 노드에 검문소를 설치합니다"]
+];
+const THIEF_ABS=[
+  ["dis","🥷","변장","CCTV 조회·투표 의심을 회피합니다"],
+  ["wipe","💨","흔적 제거","이번 턴 이동 단서를 숨깁니다"],
+  ["fakeLoc","🎭","가짜 위치","가짜 목격 제보를 흘립니다"],
+  ["tunnel","🚇","비밀 통로","주사위 없이 지하철역으로 이동"]
+];
+function renderAbilities(){
+  const bar=$("#abBar");bar.innerHTML="";
+  const myAbs=G.role==="cop"?COP_ABS:THIEF_ABS;
+  if(G.role==="cop"){
+    const mb=document.createElement("button");
+    mb.className="ab-btn meet";mb.id="ab-meet";
+    mb.innerHTML=`<span class="ai">🚨</span>긴급회의<span class="cnt">${G.meetings}</span>`;
+    mb.addEventListener("click",()=>openMeetingCop());
+    bar.appendChild(mb);
+  }
+  for(const[key,ic,name] of myAbs){
+    const b=document.createElement("button");
+    b.className="ab-btn";b.id="ab-"+key;
+    b.innerHTML=`<span class="ai">${ic}</span>${name}<span class="cnt">${G.ab[key]}</span>`;
+    b.addEventListener("click",()=>useAbility(key));
+    bar.appendChild(b);
+  }
+  for(let i=0;i<G.cards.length;i++){
+    const c=G.cards[i];
+    const b=document.createElement("button");
+    b.className="ab-btn card-item";
+    b.innerHTML=`<span class="ai">${c.ic}</span>${c.name}`;
+    b.addEventListener("click",()=>useCard(i));
+    bar.appendChild(b);
+  }
+  updateAbilityStates();
+}
+function updateAbilityStates(){
+  const myTurn=G.actor===G.role&&(G.phase==="dice"||G.phase==="pick")&&!G.over;
+  $$("#abBar .ab-btn").forEach(b=>b.disabled=!myTurn);
+  const mb=$("#ab-meet");if(mb)mb.disabled=!(myTurn&&G.phase==="dice"&&G.meetings>0);
+  for(const[key] of (G.role==="cop"?COP_ABS:THIEF_ABS)){
+    const b=$("#ab-"+key);
+    if(b){b.disabled=!myTurn||G.ab[key]<=0;
+      const c=b.querySelector(".cnt");if(c)c.textContent=G.ab[key]}
+  }
+}
+
+/* ---------- Cards ---------- */
+const CARD_POOL={
+  thief:[
+    {ic:"🏃",name:"도주",desc:"이번 이동 +3칸",fx(){G.nextBonus=3;toast("🏃 도주 카드: 이번 이동 +3칸")}},
+    {ic:"⚡",name:"더블 이동",desc:"주사위 2배",fx(){G.nextDouble=true;toast("⚡ 더블 이동: 주사위 눈 2배")}},
+    {ic:"🥷",name:"변장",desc:"변장 1회 충전",fx(){G.ab.dis++;toast("🥷 변장 횟수 +1")}},
+    {ic:"🛰",name:"드론 무력화",desc:"경찰 드론 봉인",fx(){G.droneDead=true;toast("🛰 경찰 드론이 무력화되었습니다")}},
+    {ic:"📹",name:"CCTV 해킹",desc:"경찰 CCTV -1",fx(){if(G.ab.cctv>0)G.ab.cctv--;toast("📹 경찰 CCTV 1회 차단!")}},
+    {ic:"💨",name:"흔적 제거",desc:"흔적 제거 +1",fx(){G.ab.wipe++;toast("💨 흔적 제거 +1")}}
+  ],
+  cop:[
+    {ic:"⚡",name:"더블 이동",desc:"주사위 2배",fx(){G.nextDouble=true;toast("⚡ 더블 이동: 주사위 눈 2배")}},
+    {ic:"📡",name:"긴급 수배",desc:"도둑 위치 공개",fx(){G.ghost=thief().pos;refreshTokens();SFX.alarm();
+      log(`📡 <b>긴급 수배!</b> 도둑이 <b>${quadrant(G.ghost)}</b> 구역 📍 지점에서 포착되었습니다.`,"clue")}},
+    {ic:"📹",name:"CCTV 보충",desc:"CCTV +1",fx(){G.ab.cctv++;toast("📹 CCTV 감시 +1")}},
+    {ic:"🛑",name:"도주 차단",desc:"도둑 다음 주사위 -2",fx(){G.thiefDebuff=2;toast("🛑 도둑의 다음 이동이 2칸 감소합니다")}},
+    {ic:"🚨",name:"회의 소집권",desc:"긴급회의 +1",fx(){G.meetings++;toast("🚨 긴급회의 횟수 +1")}}
+  ]
+};
+function drawCard(){
+  if(G.cards.length>=3){log("🃏 카드가 가득 차 새 카드를 버렸습니다.","sys");return}
+  const pool=CARD_POOL[G.role];
+  const c=pool[rnd(pool.length)];
+  G.cards.push(c);SFX.cash();
+  log(`🃏 아이템 카드 <b>${c.ic} ${c.name}</b> 획득! (${c.desc})`,"sys");
+  renderAbilities();renderHud();
+}
+function useCard(i){
+  if(G.actor!==G.role||G.over)return;
+  const c=G.cards.splice(i,1)[0];
+  SFX.click();c.fx();
+  log(`🃏 <b>${c.ic} ${c.name}</b> 카드를 사용했습니다.`,"sys");
+  renderAbilities();renderHud();
+}
+
+/* ---------- Turn Flow ---------- */
 function nextActor(actor){
   if(G.over)return;
   G.actor=actor;G.phase="dice";G.dice=0;G.candidates=[];
-  setHud();
-  setSelected("cop",actor==="cop");
-  setSelected("thief",actor==="thief"&&G.role==="thief");
-  const isPlayer=(actor===G.role);
+  if(actor==="thief"){G.wipeThisTurn=false;G.hideoutTurn=false}
+  setHudWho();updateAbilityStates();
+  setSel();
+  const isPlayer=actor===G.role;
   $("#rollBtn").disabled=!isPlayer;
   if(isPlayer){
-    note("🎲 주사위를 굴려주세요",true);
-    startTimer(()=>{ // 시간 초과 → 자동 진행
-      if(G.phase==="dice")$("#rollBtn").click();
-      else if(G.phase==="pick")autoPick();
-    });
+    note("🎲 주사위를 굴리거나 능력·카드를 사용하세요",true);
+    startTimer(()=>{if(G.phase==="dice")$("#rollBtn").click();else if(G.phase==="pick")autoPick()});
   }else{
-    note(actor==="thief"?"🦹 도둑이 움직이는 중…":"👮 경찰이 수사 중…",true);
+    note(actor==="thief"?"🦹 도둑이 도시 어딘가에서 움직이는 중…":"👮 경찰이 수사 중…",true);
     stopTimer();
-    setTimeout(aiTurn,900);
+    setTimeout(()=>actor==="thief"?aiThiefTurn():aiCopTurn(),900);
   }
 }
-
-/* --- 주사위 버튼(플레이어) --- */
+function setSel(){
+  $("#tok-cop").classList.toggle("selected",G.actor==="cop");
+  $("#tok-cop").querySelector(".ring").setAttribute("opacity",G.actor==="cop"?"0.9":"0");
+  for(let i=0;i<4;i++){
+    const on=G.actor==="thief"&&G.role==="thief"&&i===G.ti;
+    $("#tok-s"+i).classList.toggle("selected",on);
+    $("#tok-s"+i).querySelector(".ring").setAttribute("opacity",on?"0.9":"0");
+  }
+}
 $("#rollBtn").addEventListener("click",async()=>{
   if(G.phase!=="dice"||G.actor!==G.role||G.over)return;
-  G.phase="anim";
-  $("#rollBtn").disabled=true;
-  stopTimer();
-  const v=1+rnd(6);
+  G.phase="anim";$("#rollBtn").disabled=true;stopTimer();updateAbilityStates();
+  let v=1+rnd(6);
   await rollDiceAnim(v);
+  if(G.nextDouble){v*=2;G.nextDouble=false;note("⚡ 더블 이동! "+v+"칸")}
+  if(G.nextBonus){v+=G.nextBonus;G.nextBonus=0}
+  if(G.role==="thief"&&G.thiefDebuff){v=Math.max(1,v-G.thiefDebuff);G.thiefDebuff=0;note("🛑 검문 강화로 이동력이 감소했습니다")}
   G.dice=v;
   log(`🎲 <b>${v}</b>가 나왔습니다. 이동할 지점을 선택하세요.`,G.role);
   beginPick(v);
 });
 function beginPick(steps){
-  G.phase="pick";
-  const from=G.actor==="cop"?G.copPos:G.thiefPos;
+  G.phase="pick";updateAbilityStates();
+  const from=G.actor==="cop"?G.copPos:thief().pos;
   G.candidates=reachable(from,steps);
-  // 도둑일 때: 경찰 위치로의 자진 이동도 허용(경고만)
-  highlightCandidates(G.candidates,true);
+  if(G.actor==="thief"&&G.thiefMoney<GOAL_UNLOCK)
+    G.candidates=G.candidates.filter(c=>NODE[c].t!=="airport");
+  highlight(G.candidates,true);
   note(`✨ ${steps}칸 이내 지점으로 이동하세요`,true);
   startTimer(autoPick);
 }
-function highlightCandidates(ids,on){
+function highlight(ids,on){
   $$("#boardSvg .node").forEach(g=>{
     const hit=on&&ids.includes(+g.dataset.id);
     g.classList.toggle("candidate",hit);
@@ -1026,229 +1179,557 @@ function highlightCandidates(ids,on){
 function autoPick(){
   if(G.phase!=="pick")return;
   toast("⏰ 시간 초과 — 자동 이동합니다");
-  const pick=G.candidates[rnd(G.candidates.length)];
-  onNodeClick(pick,true);
+  onNodeClick(G.candidates[rnd(G.candidates.length)],true);
 }
 async function onNodeClick(id,forced=false){
+  if(suppressClick&&!forced)return;
+  if(G.ckMode){placeCheckpoint(id);return}
   if(G.phase!=="pick"||G.over)return;
   if(!G.candidates.includes(id))return;
   if(!forced)SFX.click();
-  stopTimer();
-  highlightCandidates([],false);
-  G.phase="anim";note("");
+  stopTimer();highlight([],false);G.phase="anim";note("");updateAbilityStates();
   await animateMove(G.actor,id);
-  afterMove();
+  G.actor==="thief"?afterThiefMove():afterCopMove();
 }
 async function animateMove(actor,dest){
-  const from=actor==="cop"?G.copPos:G.thiefPos;
+  const from=actor==="cop"?G.copPos:thief().pos;
   const path=pathTo(from,dest);
-  const visible=(actor===G.role)||(actor==="cop")||(G.turn%REVEAL_EVERY===0&&G.role==="cop");
+  G.lastEdgeType=ETYPE[path[path.length-2]+"-"+path[path.length-1]]||"taxi";
   for(let i=1;i<path.length;i++){
-    if(actor==="cop"){G.copPos=path[i];placeToken("cop",G.copPos,true)}
-    else{
-      G.thiefPos=path[i];
-      if(G.role==="thief")placeToken("thief",G.thiefPos,true);
-    }
-    if(visible)SFX.move();
-    await sleep(430);
+    if(actor==="cop"){G.copPos=path[i];moveEl("tok-cop",G.copPos)}
+    else{thief().pos=path[i];moveEl("tok-s"+G.ti,path[i])}
+    SFX.move();await sleep(400);
   }
   G.moves+=path.length-1;
   if(actor===G.role)G.playerMoves+=path.length-1;
 }
-function afterMove(){
-  if(G.over)return;
-  const actorName=G.actor==="thief"?"🦹 도둑":"👮 경찰";
-  const isMe=G.actor===G.role;
-  // 로그
-  if(G.actor==="thief"&&G.role==="cop"){
-    log(`${actorName}이 이동했습니다. <b>(은신 중)</b>`,"thief");
-  }else{
-    const n=NODE[G.actor==="thief"?G.thiefPos:G.copPos];
-    const where=n.t?TYPE_META[n.t][1]:("지점 "+n.id);
-    log(`${actorName}${isMe?" (나)":""}가 <b>${where}</b>(으)로 이동했습니다.`,G.actor);
-  }
 
-  /* --- 체포 판정 --- */
-  if(G.copPos===G.thiefPos){endGame("cop","catch");return}
-  /* --- 탈출 판정 --- */
-  if(G.actor==="thief"&&EXITS.includes(G.thiefPos)){endGame("thief","escape");return}
-
-  if(G.actor==="thief"){
-    // 공개 턴 처리
-    if(G.turn%REVEAL_EVERY===0){
-      G.lastSeen=G.thiefPos;
-      if(G.role==="cop"){
-        SFX.alarm();
-        const n=NODE[G.thiefPos];
-        log(`📡 <b>위치 공개!</b> 도둑이 <b>${n.t?TYPE_META[n.t][1]:"지점 "+n.id}</b>에서 목격되었습니다!`,"sys");
-        note("📡 도둑의 위치가 공개되었습니다!");
-      }
+/* ---------- 경제: 절도 / 부동산 ---------- */
+async function doHeist(){
+  const n=NODE[thief().pos];
+  if(!n)return;
+  if(n.t==="casino"){
+    const win=Math.random()<.6;
+    const amt=win?5+rnd(11):-3;
+    G.thiefMoney=Math.max(0,G.thiefMoney+amt);
+    if(G.role==="thief"){
+      SFX.cash();
+      await flashCard("🎰",win?"잭팟!":"꽝…",win?`카지노에서 <b>₩${amt}만</b>을 땄습니다!`:`₩3만을 잃었습니다…`,1800);
     }
-    refreshTokens();
-    nextActor("cop");
+    log(`🎰 카지노에서 ${win?"₩"+amt+"만 획득":"₩3만 손실"} 소식이 들려옵니다.`,"clue");
+  }else if(n.heist&&!G.looted[n.id]){
+    G.looted[n.id]=true;
+    G.thiefMoney+=n.heist;
+    const nm=META[n.t][1];
+    if(G.role==="thief"){
+      SFX.cash();
+      await flashCard(META[n.t][0],`${nm} 털이 성공!`,`<b>₩${n.heist}만</b>을 손에 넣었습니다. (총 ₩${G.thiefMoney}만)`,1900);
+    }else SFX.alarm();
+    log(`🚨 <b>${nm}</b>에서 ${n.t==="bank"?"해킹":"절도"} 사건 발생! (-₩${n.heist}만)`,"clue");
+    G.clue.push(`턴${G.turn}: ${nm}(${quadrant(n.id)}) 사건 발생`);
+  }
+  if(G.thiefMoney>=GOAL_UNLOCK&&!G.airportNoted){
+    G.airportNoted=true;
+    log(`🛫 도둑의 자금이 ₩${GOAL_UNLOCK}만을 넘었습니다! <b>공항 탈출이 가능해졌습니다.</b>`,"sys");
+    if(G.role==="thief")toast("🛫 공항이 열렸습니다!");else SFX.siren();
+  }
+}
+function offerProperty(actor){
+  return new Promise(res=>{
+    const pos=actor==="cop"?G.copPos:thief().pos;
+    const n=NODE[pos];
+    const money=actor==="cop"?G.copMoney:G.thiefMoney;
+    const isPlayer=actor===G.role;
+    if(!n.buy||G.owned[n.id]||!isPlayer||money<n.buy){res();return}
+    const eff=actor==="cop"?"📹 CCTV 강화 — 도둑이 이곳에 오면 위치가 공개됩니다":"🥷 은신처 — 이곳에 머물면 단서·제보가 차단됩니다";
+    $("#buyTitle").textContent=`${META[n.t][0]} ${META[n.t][1]} 매입`;
+    $("#buyDesc").innerHTML=`가격 <b>₩${n.buy}만</b> (보유 ₩${money}만)<br>${eff}`;
+    $("#buyModal").hidden=false;
+    stopTimer();
+    const done=buy=>{
+      $("#buyModal").hidden=true;
+      $("#buyGo").onclick=null;$("#buyPass").onclick=null;
+      if(buy){
+        if(actor==="cop")G.copMoney-=n.buy;else G.thiefMoney-=n.buy;
+        G.owned[n.id]=actor;setOwnRing(n.id,actor);
+        SFX.cash();
+        log(`${actor==="cop"?"👮":"🦹"} <b>${META[n.t][1]}</b>을(를) 매입했습니다. ${actor==="cop"?"(CCTV 강화)":"(은신처)"}`,actor);
+        drawCard();
+      }
+      renderHud();res();
+    };
+    $("#buyGo").onclick=()=>{SFX.click();done(true)};
+    $("#buyPass").onclick=()=>{SFX.click();done(false)};
+    setTimeout(()=>{if(!$("#buyModal").hidden)done(false)},12000);
+  });
+}
+/* ---------- 턴 마무리 ---------- */
+async function afterThiefMove(){
+  if(G.over)return;
+  const tp=thief().pos;
+  // 은신처
+  if(G.owned[tp]==="thief"){G.hideoutTurn=true;
+    if(G.role==="thief"){toast("🥷 은신처 — 이번 턴 단서가 차단됩니다");G.susp[G.ti]=Math.max(0,G.susp[G.ti]-10)}}
+  // 검문소
+  if(G.checkpoint&&tp===G.checkpoint){
+    SFX.siren();G.ghost=tp;G.thiefDebuff=2;G.susp[G.ti]+=20;
+    log(`🚔 <b>검문소 적발!</b> 도둑이 검문소에 걸렸습니다. 위치 공개 + 다음 이동 -2`,"clue");
+    if(G.role==="thief")await flashCard("🚔","검문소 적발!","경찰 검문소에 걸렸습니다.<br>위치가 공개되고 다음 이동이 느려집니다.",1900);
+    G.checkpoint=null;
+  }
+  // 경찰 소유 부동산 = CCTV 강화
+  if(G.owned[tp]==="cop"&&!G.hideoutTurn){
+    SFX.alarm();G.ghost=tp;G.susp[G.ti]+=15;
+    log(`📹 <b>CCTV 강화 구역 포착!</b> ${META[NODE[tp].t][1]} 부근에서 도둑 감지.`,"clue");
+    G.clue.push(`턴${G.turn}: CCTV가 ${META[NODE[tp].t][1]}에서 수상한 움직임 포착`);
+  }
+  await doHeist();
+  // 자금 승리
+  if(G.thiefMoney>=GOAL_WIN){endGame("thief","rich");return}
+  // 공항 탈출
+  if(NODE[tp].t==="airport"&&G.thiefMoney>=GOAL_UNLOCK){endGame("thief","escape");return}
+  // 이동수단 단서
+  if(!G.wipeThisTurn&&!G.hideoutTurn){
+    log(`🔎 단서: 도둑이 <b>${TRANS[G.lastEdgeType]}</b>을(를) 이용했습니다.`,"clue");
+    G.clue.push(`턴${G.turn}: ${TRANS[G.lastEdgeType]} 이용 흔적`);
+  }else if(G.role==="cop"){
+    log(`🔎 이번 턴 도둑의 흔적이 발견되지 않았습니다…`,"clue");
+  }
+  // 정기 목격 제보
+  if(G.turn%REVEAL_EVERY===0&&!G.hideoutTurn){
+    G.ghost=tp;G.susp[G.ti]+=12;
+    SFX.alarm();
+    log(`📡 <b>시민 제보!</b> 도둑이 <b>${quadrant(tp)}</b> 구역 📍 지점 부근에서 목격되었습니다.`,"clue");
+    G.clue.push(`턴${G.turn}: ${quadrant(tp)} 구역에서 목격 제보`);
+  }
+  // 시민 NPC 이동 + 의심도 노이즈
+  await moveCitizens();
+  if(G.role==="thief")offerPropertyThenNext("thief");
+  else nextToCop();
+  async function nextToCop(){refreshTokens();renderHud();nextActor("cop")}
+}
+async function offerPropertyThenNext(actor){
+  await offerProperty(actor);
+  refreshTokens();renderHud();
+  nextActor(actor==="thief"?"cop":"thief");
+}
+async function moveCitizens(){
+  for(let i=0;i<4;i++){
+    if(i===G.ti)continue;
+    const opts=ADJ[G.sus[i].pos];
+    G.sus[i].pos=opts[rnd(opts.length)];
+    moveEl("tok-s"+i,G.sus[i].pos);
+    G.susp[i]=Math.min(90,G.susp[i]+rnd(9));
+  }
+  await sleep(450);
+}
+async function afterCopMove(){
+  if(G.over)return;
+  // 현장 검거: 같은 노드의 용의자
+  const here=G.sus.map((s,i)=>({...s,i})).filter(s=>s.pos===G.copPos&&!G.cleared[s.i]);
+  if(here.length){
+    const s=here[0];
+    stopTimer();
+    await flashCard("🚔","현장 검문!",`시민 <b>${"ABCD"[s.i]} · ${s.name}</b>을(를) 검문합니다…`,1700);
+    await arrestSuspect(s.i,"현장 검거");
+    if(G.over)return;
+  }
+  if(G.turn>=TURN_LIMIT){endGame("thief","survive");return}
+  if(G.role==="cop"){
+    await offerProperty("cop");
+    endTurn();
+  }else endTurn();
+}
+function endTurn(){
+  G.turn++;
+  G.copMoney+=3; // 수사비 지급
+  refreshTokens();renderHud();
+  if(G.turn>TURN_LIMIT){endGame("thief","survive");return}
+  $("#hudTurn").textContent=G.turn;
+  nextActor("thief");
+}
+
+/* ---------- 특수능력 ---------- */
+function useAbility(key){
+  if(G.actor!==G.role||G.over||G.ab[key]<=0)return;
+  SFX.click();
+  if(G.role==="cop")copAbility(key);else thiefAbility(key);
+}
+function copAbility(key){
+  if(key==="cctv"){
+    G.cctvMode=!G.cctvMode;
+    $("#ab-cctv").classList.toggle("armed",G.cctvMode);
+    $$(".token.sus").forEach((t,i)=>t.classList.toggle("cctv-mode",G.cctvMode&&!G.cleared[i]));
+    note(G.cctvMode?"📹 조회할 용의자를 터치하세요":"");
+    return;
+  }
+  G.ab[key]--;updateAbilityStates();
+  if(key==="drone"){
+    if(G.droneDead){log("🛰 드론이 전파 방해로 무력화되어 있습니다!","sys");toast("🛰 드론 무력화됨!");return}
+    SFX.notify();
+    log(`🛰 드론 수색 결과: 도둑은 <b>${quadrant(thief().pos)}</b> 구역에 있습니다.`,"clue");
+    G.clue.push(`드론: 도둑은 ${quadrant(thief().pos)} 구역`);
+    note("🛰 "+quadrant(thief().pos)+" 구역 감지!");
+  }else if(key==="gps"){
+    SFX.alarm();G.ghost=thief().pos;refreshTokens();
+    log(`📍 <b>GPS 스캔!</b> 도둑의 현재 위치가 📍 핀으로 표시되었습니다.`,"clue");
+    G.clue.push(`GPS: 정확한 위치 포착 (턴${G.turn})`);
+    G.susp[G.ti]+=25;
+  }else if(key==="ck"){
+    G.ckMode=true;
+    $$("#boardSvg .node").forEach(g=>g.classList.add("cktarget"));
+    note("🚔 검문소를 설치할 노드를 터치하세요",true);
+  }
+}
+function placeCheckpoint(id){
+  G.ckMode=false;
+  $$("#boardSvg .node").forEach(g=>g.classList.remove("cktarget"));
+  G.checkpoint=id;setPin("pin-ck",id);
+  SFX.notify();note("");
+  log(`🚔 <b>${NODE[id].t?META[NODE[id].t][1]:"지점 "+id}</b>에 검문소를 설치했습니다.`,"cop");
+}
+function onSuspectClick(i){
+  if(!G.cctvMode||G.cleared[i]||G.over)return;
+  G.cctvMode=false;G.ab.cctv--;
+  $("#ab-cctv").classList.remove("armed");
+  $$(".token.sus").forEach(t=>t.classList.remove("cctv-mode"));
+  updateAbilityStates();note("");
+  const isThief=i===G.ti;
+  if(isThief&&G.disguised){
+    G.disguised=false;
+    SFX.notify();
+    log(`📹 CCTV 조회: <b>${"ABCD"[i]} · ${G.sus[i].name}</b> — 시민으로 확인…? <i>(기록이 조작된 것 같다)</i>`,"cop");
+    toast("📹 신원 확인: 시민 (…진짜일까?)");
+    return;
+  }
+  if(isThief){
+    SFX.siren();G.susp[i]+=40;
+    flashCard("🚨","정체 불명!",`<b>${"ABCD"[i]} · ${G.sus[i].name}</b>의 신원 기록이 존재하지 않습니다!<br>이자가 도둑일 가능성이 매우 높습니다!`,2400);
+    log(`📹 <b>CCTV 조회: ${"ABCD"[i]} ${G.sus[i].name} — 🚨 정체 불명!</b> 수배 대상입니다!`,"clue");
+    G.clue.push(`CCTV: ${"ABCD"[i]}(${G.sus[i].name}) 신원 불명`);
   }else{
-    refreshTokens();
-    G.turn++;
-    if(G.turn>TURN_LIMIT){endGame("thief","survive");return}
-    $("#hudTurn").textContent=G.turn;
-    nextActor("thief");
+    SFX.notify();G.cleared[i]=true;refreshTokens();
+    log(`📹 CCTV 조회: <b>${"ABCD"[i]} · ${G.sus[i].name}</b> — ✅ 선량한 시민으로 확인.`,"cop");
+    toast(`✅ ${G.sus[i].name}은(는) 시민입니다`);
+  }
+}
+function thiefAbility(key){
+  G.ab[key]--;updateAbilityStates();
+  if(key==="dis"){G.disguised=true;G.susp[G.ti]=Math.max(0,G.susp[G.ti]-25);
+    SFX.notify();toast("🥷 변장 완료 — 다음 CCTV 조회를 속입니다");
+    log("🥷 <b>변장</b>을 사용했습니다. 의심도가 낮아지고 CCTV를 속일 수 있습니다.","thief");
+  }else if(key==="wipe"){G.wipeThisTurn=true;
+    toast("💨 이번 턴 이동 단서가 남지 않습니다");
+    log("💨 <b>흔적 제거</b> — 이번 턴 이동수단 단서가 숨겨집니다.","thief");
+  }else if(key==="fakeLoc"){
+    const far=NODES.filter(n=>distBetween(n.id,thief().pos)>=3);
+    G.fake=far[rnd(far.length)].id;setPin("pin-fake",G.fake);
+    SFX.notify();toast("🎭 가짜 목격 제보를 흘렸습니다");
+    log(`🎭 <b>가짜 위치</b> — ${quadrant(G.fake)} 구역에 가짜 제보가 퍼졌습니다.`,"thief");
+    G.aiEst=G.fake;
+  }else if(key==="tunnel"){
+    if(G.phase!=="dice"){toast("주사위를 굴리기 전에만 사용할 수 있습니다");G.ab[key]++;updateAbilityStates();return}
+    const metros=NODES.filter(n=>n.t==="metro"&&n.id!==thief().pos).map(n=>n.id);
+    G.phase="pick";G.candidates=metros;highlight(metros,true);
+    note("🚇 이동할 지하철역을 선택하세요",true);
+    G.wipeThisTurn=true;
   }
 }
 
-/* ---------------- AI ---------------- */
-async function aiTurn(){
+/* ---------- 체포 공통 ---------- */
+async function arrestSuspect(i,how){
+  stopTimer();
+  const isThief=i===G.ti;
+  if(isThief){
+    SFX.catch();
+    await flashCard("⛓","체포 성공!",`<b>${"ABCD"[i]} · ${G.sus[i].name}</b>의 정체는 도둑이었습니다!<br>(${how})`,2300);
+    endGame("cop","arrest");
+  }else{
+    SFX.vote();G.rep--;G.cleared[i]=true;G.susp[i]=0;
+    G.thiefMoney+=3;
+    await flashCard("😢","무고한 시민!",`<b>${G.sus[i].name}</b>은(는) 평범한 시민이었습니다…<br>경찰 평판 하락 ${"❤".repeat(Math.max(0,G.rep))}${"🖤".repeat(3-Math.max(0,G.rep))} · 도둑 합의금 +₩3만`,2400);
+    log(`😢 <b>${G.sus[i].name}</b>은(는) 무고했습니다. 평판 -1`,"sys");
+    refreshTokens();renderHud();
+    if(G.rep<=0){endGame("thief","rep");return}
+  }
+}
+
+/* ---------- 긴급회의 (경찰 플레이어) ---------- */
+function openMeetingCop(){
+  if(G.meetings<=0||G.phase!=="dice"||G.actor!=="cop")return;
+  G.meetings--;renderAbilities();renderHud();stopTimer();
+  SFX.siren();
+  const bg=$("#meetBg");
+  const hint=(()=>{ // 시민 1명의 진술 (도둑 구역 힌트)
+    let best=-1,bd=99;
+    for(let i=0;i<4;i++){if(i===G.ti)continue;const d=distBetween(G.sus[i].pos,thief().pos);if(d<bd){bd=d;best=i}}
+    return `${G.sus[best].name}: "저요? ${quadrant(G.sus[best].pos)}에 있었는데… ${quadrant(thief().pos)} 쪽에서 수상한 사람을 봤어요!"`;
+  })();
+  bg.innerHTML=`<div class="glass meet">
+    <h3><span class="em">🚨</span>긴급회의</h3>
+    <p class="msub">과반수 투표로 용의자를 체포합니다. 무고한 시민 체포 시 평판 -1</p>
+    <div class="sus-grid">${G.sus.map((s,i)=>`
+      <div class="sus-card ${G.cleared[i]?"cleared":""}" data-i="${i}">
+        <div class="sa">${s.emoji}</div>
+        <div class="sn">${"ABCD"[i]} · ${s.name}</div>
+        <div class="st">${G.cleared[i]?"✅ 시민 확인됨":"현재 "+quadrant(s.pos)+" 구역"}</div>
+      </div>`).join("")}</div>
+    <div class="evi-box"><h4>🗂 수집된 증거</h4>
+      ${G.clue.length?G.clue.slice(-6).map(c=>`<div>· ${c}</div>`).join(""):"<div>아직 수집된 증거가 없습니다.</div>"}
+      <div>· 💬 ${hint}</div>
+    </div>
+    <div class="meet-actions">
+      <button class="btn btn-glass" id="meetSkip">투표 보류</button>
+      <button class="btn btn-danger" id="meetVote" disabled>🗳 체포 투표</button>
+    </div>
+  </div>`;
+  bg.hidden=false;
+  let picked=-1;
+  bg.querySelectorAll(".sus-card:not(.cleared)").forEach(c=>c.addEventListener("click",()=>{
+    SFX.click();picked=+c.dataset.i;
+    bg.querySelectorAll(".sus-card").forEach(x=>x.classList.toggle("voted",+x.dataset.i===picked));
+    $("#meetVote").disabled=false;
+  }));
+  $("#meetSkip").addEventListener("click",()=>{SFX.click();bg.hidden=true;log("🚨 긴급회의가 소득 없이 종료되었습니다.","sys");nextActor("cop")});
+  $("#meetVote").addEventListener("click",async()=>{
+    SFX.vote();bg.hidden=true;
+    const name=G.sus[picked].name;
+    log(`🗳 투표 결과: <b>${"ABCD"[picked]} · ${name}</b> 체포 가결 (4:1)`,"sys");
+    await flashCard("🗳","투표 가결",`시민들이 <b>${name}</b>의 체포에 찬성했습니다.`,1800);
+    await arrestSuspect(picked,"긴급회의 투표");
+    if(!G.over)nextActor("cop");
+  });
+}
+
+/* ---------- 긴급회의 (도둑 플레이어 — AI 경찰이 소집) ---------- */
+async function openMeetingThief(){
+  G.meetings--;stopTimer();SFX.siren();
+  const bg=$("#meetBg");
+  const myI=G.ti;
+  bg.innerHTML=`<div class="glass meet">
+    <h3><span class="em">🚨</span>긴급회의 소집!</h3>
+    <p class="msub">K형사가 회의를 소집했습니다. 투표로 체포 대상을 정합니다.<br>당신도 한 표를 행사할 수 있습니다.</p>
+    <div class="sus-grid">${G.sus.map((s,i)=>`
+      <div class="sus-card ${i===myI?"me-sus":""}" data-i="${i}">
+        <div class="sa">${s.emoji}</div>
+        <div class="sn">${"ABCD"[i]} · ${s.name}${i===myI?" (나)":""}</div>
+        <div class="st">의심도</div>
+        <div class="sus-bar"><i style="width:${Math.min(100,G.susp[i])}%"></i></div>
+      </div>`).join("")}</div>
+    <div class="evi-box"><h4>💬 회의 발언</h4>
+      <div>👮 K형사: "단서를 종합하면 범인은 이 안에 있다."</div>
+      <div>${G.sus[(myI+1)%4].name}: "전 아니에요! 저는 계속 ${quadrant(G.sus[(myI+1)%4].pos)}에 있었어요."</div>
+      <div id="myPlea" style="color:#FCA5A5"></div>
+    </div>
+    <div class="meet-actions">
+      <button class="btn btn-glass" id="pleaBtn">🙏 결백 주장</button>
+      ${G.ab.dis>0?'<button class="btn btn-pri" id="disBtn">🥷 변장 사용</button>':""}
+      <button class="btn btn-danger" id="voteBtn" disabled>🗳 투표</button>
+    </div>
+  </div>`;
+  bg.hidden=false;
+  let myVote=-1,acted=false;
+  bg.querySelectorAll(".sus-card").forEach(c=>c.addEventListener("click",()=>{
+    const i=+c.dataset.i;if(i===myI)return;
+    SFX.click();myVote=i;
+    bg.querySelectorAll(".sus-card").forEach(x=>x.classList.toggle("voted",+x.dataset.i===myVote));
+    $("#voteBtn").disabled=false;
+  }));
+  $("#pleaBtn").addEventListener("click",()=>{
+    if(acted)return;acted=true;SFX.click();
+    G.susp[myI]=Math.max(0,G.susp[myI]-12);
+    $("#myPlea").textContent=`🦹 나: "저도 봤어요! 분명 다른 사람이었다니까요!" (의심도 감소)`;
+  });
+  const db=$("#disBtn");
+  if(db)db.addEventListener("click",()=>{
+    if(acted)return;acted=true;SFX.notify();G.ab.dis--;G.disguised=true;
+    G.susp[myI]=Math.max(0,G.susp[myI]-30);
+    $("#myPlea").textContent="🥷 변장 발동 — 당신을 향한 의심이 크게 줄었습니다.";
+    renderAbilities();
+  });
+  await new Promise(res=>$("#voteBtn").addEventListener("click",res,{once:true}));
+  SFX.vote();bg.hidden=true;
+  // 투표 집계: 경찰 1표(최고 의심) + 시민 3표(가중 랜덤, 자기 제외) + 내 표
+  const votes=[0,0,0,0];
+  votes[myVote]++;
+  const copPick=G.susp.map((v,i)=>({v:v+(i===myI&&G.disguised?-25:0),i})).sort((a,b)=>b.v-a.v)[0].i;
+  votes[copPick]++;
+  for(let c=0;c<4;c++){
+    if(c===G.ti)continue;
+    const w=G.susp.map((v,i)=>i===c?0:v+8);
+    const tot=w.reduce((a,b)=>a+b,0);
+    let r=Math.random()*tot,pick=0;
+    for(let i=0;i<4;i++){r-=w[i];if(r<=0){pick=i;break}}
+    votes[pick]++;
+  }
+  const max=Math.max(...votes);
+  const top=votes.indexOf(max);
+  const tally=votes.map((v,i)=>`${"ABCD"[i]} ${v}표`).join(" · ");
+  log(`🗳 투표 결과 — ${tally}`,"sys");
+  if(max>=3){
+    await flashCard("🗳","투표 가결",`<b>${"ABCD"[top]} · ${G.sus[top].name}</b> 체포가 가결되었습니다. (${max}표)`,2000);
+    await arrestSuspect(top,"긴급회의 투표");
+  }else{
+    await flashCard("🤝","투표 부결","과반수를 얻은 용의자가 없어<br>아무도 체포되지 않았습니다.",1900);
+    log("🗳 과반 미달 — 체포 부결.","sys");
+  }
+  if(!G.over)aiCopMove();
+}
+
+/* ---------- AI ---------- */
+async function aiThiefTurn(){
+  const v=1+rnd(6);
+  await rollDiceAnim(v);
+  const eff=G.thiefDebuff?Math.max(1,v-G.thiefDebuff):v;G.thiefDebuff=0;
+  log(`🎲 도둑 측 주사위: <b>${v}</b>`,"thief");
+  let cands=reachable(thief().pos,eff).filter(c=>c!==G.copPos);
+  if(G.thiefMoney<GOAL_UNLOCK)cands=cands.filter(c=>NODE[c].t!=="airport");
+  // 목표: 공항(해금 시) > 미털이 절도처 > 경찰 회피
+  let dest;
+  if(G.thiefMoney>=GOAL_UNLOCK){
+    const air=cands.find(c=>NODE[c].t==="airport");
+    if(air)dest=air;
+    else dest=cands.sort((a,b)=>distBetween(a,21)-distBetween(b,21))[0];
+  }
+  if(!dest){
+    const targets=NODES.filter(n=>(n.heist&&!G.looted[n.id])||n.t==="casino").map(n=>n.id);
+    let best=null,bs=1e9;
+    for(const c of cands){
+      const dT=Math.min(...targets.map(t=>distBetween(c,t)));
+      const dC=distBetween(c,G.copPos);
+      let sc=dT*3-Math.min(dC,4)*2+(dC<=1?9:0)+Math.random()*1.5;
+      if(G.owned[c]==="cop")sc+=4;
+      if(sc<bs){bs=sc;best=c}
+    }
+    dest=best??cands[rnd(cands.length)];
+  }
+  // 경찰이 가까우면 흔적 제거
+  if(distBetween(thief().pos,G.copPos)<=2&&G.ab.wipe>0){G.ab.wipe--;G.wipeThisTurn=true;
+    log("💨 도둑이 흔적을 지운 것 같습니다…","thief")}
+  G.phase="anim";
+  await animateMove("thief",dest);
+  afterThiefMove();
+}
+async function aiCopTurn(){
+  // 회의 소집 판단
+  const maxS=Math.max(...G.susp);
+  if(G.meetings>0&&(maxS>=60||(G.turn>=6&&maxS>=45))){
+    log("🚨 <b>K형사가 긴급회의를 소집했습니다!</b>","cop");
+    await sleep(700);
+    openMeetingThief();return;
+  }
+  // 능력 사용
+  if(G.turn===3&&G.ab.drone>0&&!G.droneDead){G.ab.drone--;
+    log(`🛰 경찰 드론이 <b>${quadrant(thief().pos)}</b> 구역을 수색했습니다!`,"cop");
+    G.susp[G.ti]+=12;G.aiEst=thief().pos;}
+  if(G.turn===5&&G.ab.cctv>0){G.ab.cctv--;
+    const target=G.susp.map((v,i)=>({v,i})).filter(x=>!G.cleared[x.i]).sort((a,b)=>b.v-a.v)[0].i;
+    if(target===G.ti){
+      if(G.disguised){G.disguised=false;log(`📹 경찰이 CCTV로 <b>나</b>를 조회했지만 변장 덕분에 시민으로 판정! 🥷`,"thief");G.susp[G.ti]=Math.max(0,G.susp[G.ti]-15)}
+      else{SFX.siren();G.susp[G.ti]+=30;log(`📹 <b>경찰 CCTV에 수상한 인물로 포착되었습니다!</b> 의심도 급상승 🚨`,"clue")}
+    }else{G.cleared[target]=true;log(`📹 경찰이 ${G.sus[target].name}의 신원을 확인했습니다. (시민)`,"cop");refreshTokens()}
+  }
+  if(G.turn===7&&G.ab.gps>0){G.ab.gps--;SFX.alarm();
+    G.ghost=thief().pos;G.aiEst=thief().pos;G.susp[G.ti]+=25;refreshTokens();
+    log(`📍 <b>경찰이 GPS 스캔을 사용했습니다!</b> 내 위치가 노출되었습니다!`,"clue");}
+  aiCopMove();
+}
+async function aiCopMove(){
   if(G.over)return;
   const v=1+rnd(6);
   await rollDiceAnim(v);
-  G.dice=v;
-  const from=G.actor==="cop"?G.copPos:G.thiefPos;
-  const cands=reachable(from,v);
-  let dest;
-  if(G.actor==="thief"){
-    dest=thiefAI(cands);
-    log(`🎲 도둑이 주사위 <b>${v}</b>를 굴렸습니다.`,"thief");
-  }else{
-    dest=copAI(cands);
-    log(`🎲 경찰이 주사위 <b>${v}</b>를 굴렸습니다.`,"cop");
+  log(`🎲 경찰 측 주사위: <b>${v}</b>`,"cop");
+  const cands=reachable(G.copPos,v);
+  // 목표: 최고 의심 용의자 위치 or 추정 위치
+  const topSus=G.susp.map((x,i)=>({x:x+(G.cleared[i]?-999:0),i})).sort((a,b)=>b.x-a.x)[0].i;
+  let target=G.susp[topSus]>=45?G.sus[topSus].pos:(G.ghost??G.aiEst??G.sus[topSus].pos);
+  if(G.fake&&Math.random()<.6)target=G.fake;
+  // 그 용의자 위에 설 수 있으면 검거 시도
+  let dest=cands.find(c=>c===G.sus[topSus].pos&&G.susp[topSus]>=50);
+  if(!dest){
+    let best=null,bd=1e9;
+    for(const c of cands){const d=distBetween(c,target)+Math.random();if(d<bd){bd=d;best=c}}
+    dest=best??cands[rnd(cands.length)];
   }
   G.phase="anim";
-  await animateMove(G.actor,dest);
-  afterMove();
-}
-function thiefAI(cands){
-  // 탈출구 즉시 도달 가능하면 도달
-  const direct=cands.find(c=>EXITS.includes(c)&&c!==G.copPos);
-  if(direct)return direct;
-  let best=null,bestScore=1e9;
-  for(const c of cands){
-    if(c===G.copPos)continue;
-    const dExit=Math.min(...EXITS.map(e=>distBetween(c,e)));
-    const dCop=distBetween(c,G.copPos);
-    let score=dExit*3-Math.min(dCop,4)*2;
-    if(dCop<=1)score+=8;          // 경찰 바로 옆 회피
-    score+=Math.random()*1.5;     // 예측 불가성
-    if(score<bestScore){bestScore=score;best=c}
-  }
-  return best??cands[rnd(cands.length)];
-}
-function copAI(cands){
-  // 목표: 공개 턴이면 실제 위치, 아니면 마지막 목격 지점/예상 탈출구
-  const revealed=(G.turn%REVEAL_EVERY===0);
-  let target=revealed?G.thiefPos:G.lastSeen;
-  // 목격 정보가 오래됐으면 도둑이 노릴 가장 가까운 탈출구를 선점
-  if(!revealed){
-    const guessExit=EXITS.reduce((a,b)=>distBetween(G.lastSeen,a)<=distBetween(G.lastSeen,b)?a:b);
-    if(distBetween(G.copPos,target)<=1)target=guessExit;
-  }
-  // 실제 도둑 위치에 바로 도달 가능하면 체포 시도 (공개 턴 한정)
-  if(revealed&&cands.includes(G.thiefPos))return G.thiefPos;
-  let best=null,bestD=1e9;
-  for(const c of cands){
-    const d=distBetween(c,target)+Math.random();
-    if(d<bestD){bestD=d;best=c}
-  }
-  return best??cands[rnd(cands.length)];
+  await animateMove("cop",dest);
+  afterCopMove();
 }
 
-/* ---------------- End Game ---------------- */
+/* ---------- End ---------- */
 function endGame(winner,how){
-  G.over=true;stopTimer();highlightCandidates([],false);note("");
+  G.over=true;stopTimer();highlight([],false);note("");bgmStop();
+  // 도둑 공개
+  const tg=$("#tok-s"+G.ti);
+  tg.classList.remove("sus");tg.classList.add("thief");
+  tg.querySelector(".em").textContent="🦹";
   refreshTokens();
-  placeToken("thief",G.thiefPos,true);
   const playerWon=winner===G.role;
   if(winner==="cop")SFX.catch();else SFX.escape();
-
-  // 통계/XP
-  profile.games++;
-  if(playerWon)profile.wins++;
-  const pts=playerWon?(120+rnd(60)):(30+rnd(20));
-  const xp=playerWon?(45+rnd(25)):(12+rnd(8));
-  profile.xp+=xp;
-  saveProfile(profile);
-
+  profile.games++;if(playerWon)profile.wins++;
+  const pts=playerWon?(150+rnd(80)):(40+rnd(25));
+  const xp=playerWon?(50+rnd(30)):(14+rnd(10));
+  profile.xp+=xp;profile.pts+=pts;saveProfile(profile);
   const copWin=winner==="cop";
-  $("#winEmoji").textContent=copWin?"🚓":"💰";
+  $("#winEmoji").textContent=copWin?"⛓":how==="escape"?"🛫":how==="rich"?"💰":how==="rep"?"📉":"🌃";
   const t=$("#winTitle");
   t.textContent=copWin?"경찰 승리!":"도둑 승리!";
   t.className="win-title "+(copWin?"cop":"thief");
-  $("#winSub").textContent=
-    how==="catch"?"도둑을 체포했습니다. 도시에 평화가 찾아왔습니다."
-    :how==="escape"?"도둑이 탈출구를 통해 유유히 사라졌습니다…"
-    :"도둑이 끝까지 잡히지 않고 살아남았습니다!";
+  $("#winSub").textContent={
+    arrest:`도둑 ${thief().name}을(를) 체포했습니다. 도시에 평화가 찾아왔습니다.`,
+    escape:`도둑이 ₩${G.thiefMoney}만을 들고 공항으로 유유히 탈출했습니다…`,
+    rich:`도둑이 목표 금액 ₩${GOAL_WIN}만을 달성했습니다!`,
+    rep:"무리한 체포로 경찰의 신뢰가 무너졌습니다…",
+    survive:"도둑이 10턴 동안 끝내 잡히지 않았습니다!"
+  }[how];
   $("#stMoves").textContent=G.playerMoves;
   $("#stTurns").textContent=Math.min(G.turn,TURN_LIMIT);
   $("#stPts").textContent="+"+pts;
   $("#stXp").textContent="+"+xp;
-
-  const [tier]=tierOf(profile.xp);
-  const next={BRONZE:120,SILVER:350,GOLD:700,PLATINUM:1200,DIAMOND:2000}[tier];
-  const prev={BRONZE:0,SILVER:120,GOLD:350,PLATINUM:700,DIAMOND:1200}[tier];
+  const[tier]=tierOf(profile.xp);
+  const nextMap={BRONZE:120,SILVER:350,GOLD:700,PLATINUM:1200,DIAMOND:2000,MASTER:4000};
+  const prevMap={BRONZE:0,SILVER:120,GOLD:350,PLATINUM:700,DIAMOND:1200,MASTER:2000};
   $("#xpTierLbl").textContent=tier;
-  $("#xpTxt").textContent=`${profile.xp} / ${next} XP`;
+  $("#xpTxt").textContent=`${profile.xp} / ${nextMap[tier]} XP`;
   $("#xpFill").style.width="0";
-
   setTimeout(()=>{
     show("scr-win");
-    requestAnimationFrame(()=>$("#xpFill").style.width=Math.min(100,(profile.xp-prev)/(next-prev)*100)+"%");
+    requestAnimationFrame(()=>$("#xpFill").style.width=Math.min(100,(profile.xp-prevMap[tier])/(nextMap[tier]-prevMap[tier])*100)+"%");
     startFireworks(playerWon);
-  },900);
-
-  setTimeout(()=>{
-    log(copWin?"🚨 <b>체포 완료!</b> 게임 종료.":"🎉 <b>도둑 탈출 성공!</b> 게임 종료.","sys");
-  },100);
+  },1100);
 }
-
-/* ---------------- Fireworks / Particles ---------------- */
 let fxRaf=null;
 function startFireworks(big){
   const cv=$("#fxCanvas"),ctx=cv.getContext("2d");
   cv.width=innerWidth;cv.height=innerHeight;
-  const parts=[];
-  const COLORS=["#6366F1","#8B5CF6","#F59E0B","#22C55E","#EF4444","#F1F5F9"];
-  function burst(x,y){
-    const n=big?46:26;
-    for(let i=0;i<n;i++){
-      const a=Math.PI*2*i/n,sp=2+Math.random()*4.5;
-      parts.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1,c:COLORS[rnd(COLORS.length)],r:2+Math.random()*2.5});
-    }
-  }
+  const parts=[];const COLORS=["#6366F1","#8B5CF6","#F59E0B","#22C55E","#EF4444","#F1F5F9"];
+  function burst(x,y){const n=big?46:26;
+    for(let i=0;i<n;i++){const a=Math.PI*2*i/n,sp=2+Math.random()*4.5;
+      parts.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1,c:COLORS[rnd(COLORS.length)],r:2+Math.random()*2.5})}}
   let bursts=0;
-  const bi=setInterval(()=>{
-    burst(cv.width*(.2+Math.random()*.6),cv.height*(.15+Math.random()*.4));
-    if(++bursts>=(big?7:4))clearInterval(bi);
-  },420);
+  const bi=setInterval(()=>{burst(cv.width*(.2+Math.random()*.6),cv.height*(.15+Math.random()*.4));
+    if(++bursts>=(big?7:4))clearInterval(bi)},420);
   burst(cv.width/2,cv.height*.3);
   cancelAnimationFrame(fxRaf);
   (function loop(){
     ctx.clearRect(0,0,cv.width,cv.height);
-    for(let i=parts.length-1;i>=0;i--){
-      const p=parts[i];
+    for(let i=parts.length-1;i>=0;i--){const p=parts[i];
       p.x+=p.vx;p.y+=p.vy;p.vy+=.055;p.life-=.012;
       if(p.life<=0){parts.splice(i,1);continue}
-      ctx.globalAlpha=Math.max(0,p.life);
-      ctx.fillStyle=p.c;
-      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();
-    }
+      ctx.globalAlpha=Math.max(0,p.life);ctx.fillStyle=p.c;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}
     ctx.globalAlpha=1;
     if(parts.length||bursts<(big?7:4))fxRaf=requestAnimationFrame(loop);
   })();
 }
-
-/* ---------------- Chat ---------------- */
-const AI_CHAT_COP=["여긴 이미 포위됐다.","다음 공개 턴에 끝내주지.","지하철역 쪽인가…?","도망칠 곳은 없어. 🚨"];
-const AI_CHAT_THIEF=["후후, 난 이미 멀리 있어.","경찰 아저씨 느려요~ 🏃","탈출구가 눈앞이군.","잡을 수 있으면 잡아봐. 😏"];
+/* ---------- Chat ---------- */
+const AI_CHAT_COP=["여긴 이미 포위됐다.","CCTV는 모든 걸 보고 있지.","다음 회의에서 끝내주마.","검문소를 피할 수 있을까?"];
+const AI_CHAT_THIEF=["후후, 난 이미 멀리 있어.","은행 금고는 역시 허술하군.","시민들 속에 숨는 게 제일 편해~","공항에서 보자고. 🛫"];
 function sendChat(){
-  const inp=$("#chatInput");
-  const v=inp.value.trim();
-  if(!v)return;
-  chatMsg("나",v);
-  inp.value="";
-  SFX.click();
-  setTimeout(()=>{
-    const pool=G.role==="cop"?AI_CHAT_THIEF:AI_CHAT_COP;
-    chatMsg(G.role==="cop"?"🦹 그림자":"👮 K형사",pool[rnd(pool.length)]);
-    SFX.notify();
-  },900+rnd(1200));
+  const inp=$("#chatInput");const v=inp.value.trim();if(!v)return;
+  chatMsg("나",v);inp.value="";SFX.click();
+  setTimeout(()=>{const pool=G.role==="cop"?AI_CHAT_THIEF:AI_CHAT_COP;
+    chatMsg(G.role==="cop"?"🦹 ???":"👮 K형사",pool[rnd(pool.length)]);SFX.notify()},900+rnd(1200));
 }
 $("#chatSend").addEventListener("click",sendChat);
 $("#chatInput").addEventListener("keydown",e=>{if(e.key==="Enter")sendChat()});
@@ -1256,29 +1737,23 @@ $$(".tab").forEach(t=>t.addEventListener("click",()=>{
   SFX.click();
   $$(".tab").forEach(x=>x.classList.toggle("on",x===t));
   const isLog=t.dataset.tab==="log";
-  $("#logPanel").hidden=!isLog;
-  $("#chatPanel").hidden=isLog;
-  $("#chatRow").hidden=isLog;
+  $("#logPanel").hidden=!isLog;$("#chatPanel").hidden=isLog;$("#chatRow").hidden=isLog;
 }));
 
-/* ---------------- Lobby / Rooms ---------------- */
+/* ---------- Lobby ---------- */
 const BOT_NAMES=["그림자","밤안개","스피드왕","명탐정Kim","Phantom","루팡3세","CityHunter","Mr.X"];
-function genCode(){
-  const C="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  return Array.from({length:6},()=>C[rnd(C.length)]).join("");
-}
+function genCode(){const C="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  return Array.from({length:6},()=>C[rnd(C.length)]).join("")}
 let lobbyTimer=null;
 function openLobby(code){
   $("#roomCode").textContent=code;
-  // 내 프로필
   $("#myName").textContent=profile.name;
   $("#myAvatar").textContent=profile.avatar;
   const wr=profile.games?Math.round(profile.wins/profile.games*100):0;
   $("#myWinRate").textContent=wr+"%";
   $("#myRecord").textContent=`${profile.games}전 ${profile.wins}승`;
-  const [tier,grad]=tierOf(profile.xp);
+  const[tier,grad]=tierOf(profile.xp);
   $("#myTier").textContent=tier;$("#myTier").style.background=grad;
-  // 상대 초기화
   $("#oppCard").hidden=true;$("#oppSlot").hidden=false;
   $("#btnReady").disabled=true;
   const mr=$("#myReady");mr.className="ready-tag wait";mr.textContent="WAITING";
@@ -1292,8 +1767,7 @@ function openLobby(code){
     $("#oppRecord").textContent=`${100+rnd(400)}전 ${60+rnd(200)}승`;
     $("#oppSlot").hidden=true;$("#oppCard").hidden=false;
     $("#btnReady").disabled=false;
-    SFX.notify();
-    toast("상대 플레이어가 입장했습니다!");
+    SFX.notify();toast("상대 플레이어가 입장했습니다!");
   },1700+rnd(1600));
 }
 $("#btnCreate").addEventListener("click",()=>{SFX.click();openLobby(genCode())});
@@ -1316,63 +1790,75 @@ $("#btnReady").addEventListener("click",()=>{
   setTimeout(()=>show("scr-role"),700);
 });
 $("#btnQuick").addEventListener("click",()=>{SFX.click();show("scr-role")});
-
-/* ---------------- Role / Game entry ---------------- */
-$("#pickCop").addEventListener("click",()=>{SFX.click();startGame("cop")});
-$("#pickThief").addEventListener("click",()=>{SFX.click();startGame("thief")});
-$("#gameExit").addEventListener("click",()=>{
-  SFX.click();stopTimer();G.over=true;show("scr-home");
-});
+$("#pickCop").addEventListener("click",()=>{SFX.click();newGame("cop")});
+$("#pickThief").addEventListener("click",()=>{SFX.click();newGame("thief")});
+$("#gameExit").addEventListener("click",()=>{SFX.click();stopTimer();G.over=true;bgmStop();show("scr-home")});
 $("#btnAgain").addEventListener("click",()=>{SFX.click();show("scr-role")});
 
-/* ---------------- Ranking ---------------- */
-const RANK_BOTS=[
-  ["Mr.X","🥷",1890],["명탐정Kim","🕵️",1540],["그림자","🦹",1210],["CityHunter","🐺",980],
-  ["밤안개","🧛",760],["루팡3세","🎩",540],["Phantom","👻",380],["스피드왕","🏃",210]
-];
+/* ---------- Ranking ---------- */
+const RANK_BOTS=[["Mr.X","🥷",2140],["명탐정Kim","🕵️",1540],["그림자","🦹",1210],["CityHunter","🐺",980],
+  ["밤안개","🧛",760],["루팡3세","🎩",540],["Phantom","👻",380],["스피드왕","🏃",210]];
 $("#btnRank").addEventListener("click",()=>{
   SFX.click();
   const rows=[...RANK_BOTS.map(([n,a,x])=>({n,a,x,me:false})),{n:profile.name,a:profile.avatar,x:profile.xp,me:true}]
     .sort((a,b)=>b.x-a.x);
   $("#rankBody").innerHTML=rows.map((r,i)=>{
-    const [tier]=tierOf(r.x);
+    const[tier]=tierOf(r.x);
     return `<div class="glass rank-item ${i<3?"top"+(i+1):""} ${r.me?"me-row":""}" style="animation-delay:${i*50}ms">
-      <div class="rno">${i+1}</div>
-      <div class="avatar">${r.a}</div>
+      <div class="rno">${i+1}</div><div class="avatar">${r.a}</div>
       <div class="rinfo"><div class="rn">${r.n}${r.me?' <span style="color:#A5B4FC;font-size:11px">(나)</span>':""}</div>
       <div class="rw">${tier}</div></div>
-      <div class="rxp">${r.x.toLocaleString()} XP</div>
-    </div>`;
+      <div class="rxp">${r.x.toLocaleString()} XP</div></div>`;
   }).join("");
   show("scr-rank");
 });
 
-/* ---------------- Home ambience ---------------- */
-function initCityDots(){
+/* ---------- Shop ---------- */
+const SKINS=[["🕵️","탐정",0],["🥷","닌자",300],["🤖","안드로이드",500],["🐱","캣버글러",400],
+  ["🧛","뱀파이어",600],["👑","킹",1000],["🦊","폭스",450],["👻","팬텀",800],["🐺","울프",550]];
+function renderShop(){
+  $("#shopPts").textContent=profile.pts.toLocaleString();
+  $("#shopGrid").innerHTML=SKINS.map(([e,n,p])=>{
+    const owned=profile.skins.includes(e);
+    const eq=profile.avatar===e;
+    return `<div class="shop-item ${owned?"owned":""} ${eq?"equipped":""}" data-e="${e}" data-p="${p}">
+      <div class="se">${e}</div><div class="sn">${n}</div>
+      <div class="sp">${eq?"✓ 장착 중":owned?"보유 중":"🪙 "+p+" P"}</div></div>`;
+  }).join("");
+  $$("#shopGrid .shop-item").forEach(it=>it.addEventListener("click",()=>{
+    const e=it.dataset.e,p=+it.dataset.p;
+    if(profile.skins.includes(e)){profile.avatar=e;saveProfile(profile);SFX.notify();toast(`${e} 아바타를 장착했습니다`)}
+    else if(profile.pts>=p){profile.pts-=p;profile.skins.push(e);profile.avatar=e;saveProfile(profile);SFX.cash();toast(`${e} 구매 완료!`)}
+    else{SFX.click();toast("포인트가 부족합니다 — 게임에서 포인트를 모아보세요!")}
+    renderShop();
+  }));
+}
+$("#btnShop").addEventListener("click",()=>{SFX.click();renderShop();show("scr-shop")});
+
+/* ---------- Home ambience ---------- */
+(function initCityDots(){
   const box=$("#cityDots");
-  const COLORS=["#6366F1","#F59E0B","#EF4444","#22C55E","#8B5CF6"];
-  for(let i=0;i<22;i++){
+  const COLORS=["#6366F1","#F59E0B","#EF4444","#22C55E","#8B5CF6","#22D3EE"];
+  for(let i=0;i<26;i++){
     const d=document.createElement("div");
     d.className="city-dot";
     d.style.left=Math.random()*100+"%";
-    d.style.top=(30+Math.random()*60)+"%";
-    d.style.background=COLORS[rnd(COLORS.length)];
-    d.style.boxShadow=`0 0 8px ${d.style.background}`;
+    d.style.top=(55+Math.random()*38)+"%";
+    const c=COLORS[rnd(COLORS.length)];
+    d.style.background=c;d.style.boxShadow=`0 0 8px ${c}`;
     d.style.animationDelay=Math.random()*3+"s";
     box.appendChild(d);
   }
-}
-function tickOnline(){
-  const base=900+rnd(400);
-  $("#onlineCnt").textContent=base.toLocaleString();
-}
-initCityDots();tickOnline();setInterval(tickOnline,3500);
-renderBoard();
+})();
+function tickOnline(){$("#onlineCnt").textContent=(900+rnd(500)).toLocaleString()}
+tickOnline();setInterval(tickOnline,3500);
+renderBoard();applyVB();
 addEventListener("resize",()=>{
   if($("#scr-win").classList.contains("active")){
     const cv=$("#fxCanvas");cv.width=innerWidth;cv.height=innerHeight;
   }
 });
+document.addEventListener("visibilitychange",()=>{if(document.hidden)bgmStop();else if(bgmOn&&$("#scr-game").classList.contains("active")&&!G.over)bgmStart()});
 </script>
 </body>
 </html>
